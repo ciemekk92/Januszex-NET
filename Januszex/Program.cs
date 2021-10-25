@@ -13,6 +13,8 @@ namespace Januszex
     {
         public static void Main(string[] args)
         {
+            DotNetEnv.Env.Load("./.env");
+
             CreateHostBuilder(args).Build().Run();
         }
 
