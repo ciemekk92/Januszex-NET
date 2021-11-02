@@ -31,11 +31,9 @@ namespace Januszex
                 configuration.RootPath = "ClientApp/build";
             });
             
-            DotNetEnv.Env.Load("./.env");
-
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(
-                    Configuration.GetConnectionString(DotNetEnv.Env.GetString("DB__CONNECTION__STRING"))));
+                    Configuration.GetConnectionString("ApplicationDbContext")));
             
             services.AddDatabaseDeveloperPageExceptionFilter();
         }

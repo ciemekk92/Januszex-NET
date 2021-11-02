@@ -9,8 +9,7 @@ namespace Januszex.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            DotNetEnv.Env.Load("./.env");
-            optionsBuilder.UseNpgsql(DotNetEnv.Env.GetString("DB__CONNECTION__STRING")).UseSnakeCaseNamingConvention();
+            optionsBuilder.UseNpgsql().UseSnakeCaseNamingConvention();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

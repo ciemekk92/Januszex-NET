@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Januszex.Data;
 using Januszex.Models;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,7 +16,6 @@ namespace Januszex
     {
         public static void Main(string[] args)
         {
-            DotNetEnv.Env.Load("./.env");
             var host = CreateHostBuilder(args).Build();
 
             CreateDbIfNotExists(host);
@@ -32,6 +32,7 @@ namespace Januszex
                 {
                     var context = services.GetRequiredService<ApplicationDbContext>();
                     context.Database.EnsureCreated();
+                    DbInitializer.Initialize(context);
                 }
                 catch (Exception e)
                 {
