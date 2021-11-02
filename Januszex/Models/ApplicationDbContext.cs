@@ -4,11 +4,18 @@ namespace Januszex.Models
 {
     public class ApplicationDbContext : DbContext
     {
+        public ApplicationDbContext (DbContextOptions<ApplicationDbContext> options) : base(options) {}
         public DbSet<Offer> Offers { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Host=my_host;Database=my_db;Username=my_user;Password=my_pw");
+            DotNetEnv.Env.Load("./.env");
+            optionsBuilder.UseNpgsql(DotNetEnv.Env.GetString("DB__CONNECTION__STRING")).UseSnakeCaseNamingConvention();
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Offer>().ToTable("Offer");
         }
     }
 }

@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Januszex.Models;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Januszex
 {
@@ -14,8 +16,29 @@ namespace Januszex
         public static void Main(string[] args)
         {
             DotNetEnv.Env.Load("./.env");
+            var host = CreateHostBuilder(args).Build();
 
-            CreateHostBuilder(args).Build().Run();
+            CreateDbIfNotExists(host);
+            
+            host.Run();
+        }
+
+        private static void CreateDbIfNotExists(IHost host)
+        {
+            using (var scope = host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                try
+                {
+                    var context = services.GetRequiredService<ApplicationDbContext>();
+                    context.Database.EnsureCreated();
+                }
+                catch (Exception e)
+                {
+                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(e, "An error occured creating the DB.");
+                }
+            }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
