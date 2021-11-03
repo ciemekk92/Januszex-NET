@@ -21,6 +21,13 @@ namespace Januszex.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            
+            modelBuilder.Entity<Offer>()
+                .HasOne(o => o.User)
+                .WithMany(u => u.Offers)
+                .HasForeignKey(o => o.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+            
             modelBuilder.Entity<Offer>().ToTable("Offer");
             modelBuilder.Entity<User>().ToTable("Users");
             

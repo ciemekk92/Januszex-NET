@@ -64,6 +64,10 @@
     <_ContentIncludedByDefault Remove="Areas\Identity\Pages\_ViewStart.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ClientApp\src\Modules\MainLayout\components" />
+  </ItemGroup>
+
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->
     <Exec Command="node --version" ContinueOnError="true">
