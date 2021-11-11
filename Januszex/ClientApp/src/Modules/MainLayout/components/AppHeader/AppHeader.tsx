@@ -7,7 +7,7 @@ export const AppHeader = (): JSX.Element => {
   return (
     <HeaderBody>
       <StyledLink to="/" replace>
-        <h1>BOARDEL</h1>
+        <h1>Januszex</h1>
       </StyledLink>
     </HeaderBody>
   );
