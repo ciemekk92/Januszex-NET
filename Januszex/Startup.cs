@@ -27,6 +27,8 @@ namespace Januszex
         {
             services.AddControllersWithViews();
 
+            services.AddRazorPages();
+
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -45,7 +47,7 @@ namespace Januszex
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
-
+            
             services.AddDatabaseDeveloperPageExceptionFilter();
         }
 
@@ -72,11 +74,13 @@ namespace Januszex
 
             app.UseRouting();
             app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
             });
 
             app.UseSpa(spa =>

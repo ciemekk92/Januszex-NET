@@ -4,9 +4,9 @@ import { Layout } from './components/Layout';
 import { Home } from './components/Home';
 import { FetchData } from './components/FetchData';
 import { Counter } from './components/Counter';
-import AuthorizeRoute from './Modules/Authorization/AuthorizeRoute';
-import ApiAuthorizationRoutes from './Modules/Authorization/AuthorizationRoutes';
-import { ApplicationPaths } from './Modules/Authorization/ApiAuthorizationConstants';
+import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
+import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
+import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
 
 import './custom.css'
 
