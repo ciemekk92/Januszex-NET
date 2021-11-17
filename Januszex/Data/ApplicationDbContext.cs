@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Immutable;
+using IdentityServer4.EntityFramework.Options;
 using Microsoft.EntityFrameworkCore;
 using Januszex.Models;
+using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Januszex.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<User>
+    public class ApplicationDbContext : ApiAuthorizationDbContext<User>
     {
-        public ApplicationDbContext (DbContextOptions<ApplicationDbContext> options) : base(options) {}
+        public ApplicationDbContext (DbContextOptions<ApplicationDbContext> options, IOptions<OperationalStoreOptions> operationalStoreOptions) 
+            : base(options, operationalStoreOptions) {}
         public DbSet<Offer> Offers { get; set; }
         public DbSet<User> Users { get; set; }
 

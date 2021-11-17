@@ -1,5 +1,6 @@
 using Januszex.Data;
 using Januszex.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -38,7 +39,13 @@ namespace Januszex
 
             services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            
+
+            services.AddIdentityServer()
+                .AddApiAuthorization<User, ApplicationDbContext>();
+
+            services.AddAuthentication()
+                .AddIdentityServerJwt();
+
             services.AddDatabaseDeveloperPageExceptionFilter();
         }
 
@@ -57,12 +64,14 @@ namespace Januszex
                 app.UseHsts();
             }
 
+            app.UseAuthentication();
+            app.UseIdentityServer();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
