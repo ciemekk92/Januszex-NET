@@ -1,12 +1,10 @@
-const localStorageMock = {
-  getItem: jest.fn(),
-  setItem: jest.fn(),
-  removeItem: jest.fn(),
-  clear: jest.fn(),
-};
-global.localStorage = localStorageMock;
+import { configure } from 'enzyme';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+
+configure({ adapter: new Adapter() });
 
 // Mock the request issued by the react app to get the client configuration parameters.
+// @ts-ignore
 window.fetch = () => {
   return Promise.resolve(
     {

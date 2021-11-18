@@ -9,6 +9,8 @@ namespace Januszex.Models
         public string OfferId { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
+
+        public string Created { get; set; }
         public string UserId { get; }
         public User User { get; set; }
     }

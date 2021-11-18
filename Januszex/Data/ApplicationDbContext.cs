@@ -25,12 +25,20 @@ namespace Januszex.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            
+
+            modelBuilder.Entity<Offer>()
+                .Property(o => o.Created)
+                .HasDefaultValueSql("current_timestamp");
+
             modelBuilder.Entity<Offer>()
                 .HasOne(o => o.User)
                 .WithMany(u => u.Offers)
                 .HasForeignKey(o => o.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.DarkMode)
+                .HasDefaultValue(false);
             
             modelBuilder.Entity<Offer>().ToTable("Offer");
             modelBuilder.Entity<User>().ToTable("Users");

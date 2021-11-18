@@ -5,13 +5,13 @@ import {
   Navbar,
   NavbarBrand,
   NavbarToggler,
-  NavItem,
   NavLink
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
 import { LoginMenu } from 'Modules/api-authorization/LoginMenu';
-import { Logo } from './Logo';
+import { Logo } from '../Logo';
+import { NavItem } from './NavMenu.styled';
 
 import './NavMenu.css';
 
