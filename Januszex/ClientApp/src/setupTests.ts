@@ -13,11 +13,11 @@ window.fetch = () => {
       ok: true,
       json: () => Promise.resolve({
         "authority": "https://localhost:5001",
-        "client_id": "testreactnet",
+        "client_id": "Januszex",
         "redirect_uri": "https://localhost:5001/authentication/login-callback",
         "post_logout_redirect_uri": "https://localhost:5001/authentication/logout-callback",
         "response_type": "id_token token",
-        "scope": "testreactnetAPI openid profile"
+        "scope": "JanuszexAPI openid profile"
      })
     });
 };
