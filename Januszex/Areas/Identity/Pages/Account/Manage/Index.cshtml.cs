@@ -23,7 +23,7 @@ namespace Januszex.Areas.Identity.Pages.Account.Manage
             _signInManager = signInManager;
         }
 
-        [Display(Name = "Nazwa u¿ytkownika")]
+        [Display(Name = "Nazwa uÅ¼ytkownika")]
         public string Username { get; set; }
 
         [TempData]
@@ -62,7 +62,7 @@ namespace Januszex.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Nie uda³o siê za³adowaæ u¿ytkownika o ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Nie udaï¿½o siï¿½ zaï¿½adowaï¿½ uï¿½ytkownika o ID '{_userManager.GetUserId(User)}'.");
             }
 
             await LoadAsync(user);
@@ -74,7 +74,7 @@ namespace Januszex.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Nie uda³o siê za³adowaæ u¿ytkownika o ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Nie udaï¿½o siï¿½ zaï¿½adowaï¿½ uï¿½ytkownika o ID '{_userManager.GetUserId(User)}'.");
             }
 
             if (!ModelState.IsValid)
@@ -90,7 +90,7 @@ namespace Januszex.Areas.Identity.Pages.Account.Manage
                 var setDarkModeResult = await _userManager.UpdateAsync(user);
                 if (!setDarkModeResult.Succeeded)
                 {
-                    StatusMessage = "Nieoczekiwany b³¹d w trakcie zmiany kolorystyki.";
+                    StatusMessage = "Nieoczekiwany bï¿½ï¿½d w trakcie zmiany kolorystyki.";
                     return RedirectToPage();
                 }
             }
@@ -102,13 +102,13 @@ namespace Januszex.Areas.Identity.Pages.Account.Manage
                 var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
                 if (!setPhoneResult.Succeeded)
                 {
-                    StatusMessage = "Nieoczekiwany b³¹d w trakcie ustawiania numeru telefonu.";
+                    StatusMessage = "Nieoczekiwany bï¿½ï¿½d w trakcie ustawiania numeru telefonu.";
                     return RedirectToPage();
                 }
             }
 
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Twój profil zosta³ zaktualizowany!";
+            StatusMessage = "TwÃ³j profil zostaÅ‚ zaktualizowany!";
             return RedirectToPage();
         }
     }
