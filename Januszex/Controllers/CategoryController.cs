@@ -38,7 +38,7 @@ namespace Januszex.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "B³¹d serwera.");
+                return StatusCode(500, "B³¹d serwera." + ex);
             }
         }
 

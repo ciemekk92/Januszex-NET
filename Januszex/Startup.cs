@@ -23,6 +23,12 @@ namespace Januszex
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.ConfigureRepositoryWrapper();
+
+            services.ConfigurePgContext(Configuration);
+
+            services.AddControllers();
+
             services.AddControllersWithViews();
 
             services.AddRazorPages();
@@ -33,9 +39,8 @@ namespace Januszex
                 configuration.RootPath = "ClientApp/build";
             });
 
-            services.ConfigureRepositoryWrapper();
 
-            services.ConfigurePgContext(Configuration);
+            services.AddAutoMapper(typeof(Startup));
 
             services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<RepositoryContext>();

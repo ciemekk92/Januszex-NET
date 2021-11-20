@@ -12,10 +12,10 @@ namespace Entities
     {
         public RepositoryContext(DbContextOptions<RepositoryContext> options, IOptions<OperationalStoreOptions> operationalStoreOptions)
             : base(options, operationalStoreOptions) { }
-        public DbSet<Offer> Offers { get; set; }
+        public DbSet<Offer> Offer { get; set; }
         public DbSet<User> Users { get; set; }
 
-        public DbSet<Category> Categories { get; set; }
+        public DbSet<Category> Category { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -46,7 +46,7 @@ namespace Entities
 
             modelBuilder.Entity<Offer>().ToTable("Offer");
             modelBuilder.Entity<User>().ToTable("Users");
-            modelBuilder.Entity<Category>().ToTable("Categories");
+            modelBuilder.Entity<Category>().ToTable("Category");
 
             SeedUsers(modelBuilder);
             SeedRoles(modelBuilder);

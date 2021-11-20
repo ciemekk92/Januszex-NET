@@ -7,7 +7,7 @@ using Entities.Models;
 
 namespace Contracts
 {
-    public interface IOfferRepository : IRepositoryBase<Offer>
+    public interface IOfferRepository
     {
     }
 }

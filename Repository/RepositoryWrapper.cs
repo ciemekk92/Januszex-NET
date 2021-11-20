@@ -15,6 +15,11 @@ namespace Repository
         private ICategoryRepository _category;
         private IUserRepository _user;
 
+        public RepositoryWrapper(RepositoryContext repositoryContext)
+        {
+            _repoContext = repositoryContext;
+        }
+
         public IOfferRepository Offer
         {
             get
