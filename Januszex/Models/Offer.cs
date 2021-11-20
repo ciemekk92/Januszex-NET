@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+
 namespace Januszex.Models
 {
     public class Offer
@@ -12,6 +13,6 @@ namespace Januszex.Models
 
         public string Created { get; set; }
         public string UserId { get; }
-        public User User { get; set; }
+        public virtual User User { get; set; }
     }
 }

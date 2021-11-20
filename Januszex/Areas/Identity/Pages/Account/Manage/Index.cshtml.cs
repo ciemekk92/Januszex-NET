@@ -62,7 +62,7 @@ namespace Januszex.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Nie uda�o si� za�adowa� u�ytkownika o ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Nie udało się załadować użytkownika o ID '{_userManager.GetUserId(User)}'.");
             }
 
             await LoadAsync(user);
@@ -74,7 +74,7 @@ namespace Januszex.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Nie uda�o si� za�adowa� u�ytkownika o ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Nie udało się załadować użytkownika o ID '{_userManager.GetUserId(User)}'.");
             }
 
             if (!ModelState.IsValid)
@@ -90,7 +90,7 @@ namespace Januszex.Areas.Identity.Pages.Account.Manage
                 var setDarkModeResult = await _userManager.UpdateAsync(user);
                 if (!setDarkModeResult.Succeeded)
                 {
-                    StatusMessage = "Nieoczekiwany b��d w trakcie zmiany kolorystyki.";
+                    StatusMessage = "Nieoczekiwany błąd w trakcie zmiany kolorystyki.";
                     return RedirectToPage();
                 }
             }
@@ -102,7 +102,7 @@ namespace Januszex.Areas.Identity.Pages.Account.Manage
                 var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
                 if (!setPhoneResult.Succeeded)
                 {
-                    StatusMessage = "Nieoczekiwany b��d w trakcie ustawiania numeru telefonu.";
+                    StatusMessage = "Nieoczekiwany błąd w trakcie ustawiania numeru telefonu.";
                     return RedirectToPage();
                 }
             }
