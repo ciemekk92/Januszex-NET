@@ -2,13 +2,17 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Januszex.Models
+namespace Entities.Models
 {
     public class Offer
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string OfferId { get; set; }
+        [Column("OfferId")]
+        public string Id { get; set; }
+        
+        [Required(ErrorMessage = "Nazwa ogłoszenia jest wymagana.")]
+        [StringLength(70, ErrorMessage = "Nazwa nie może być dłuższa niż 70 znaków.")]
         public string Title { get; set; }
         public string Content { get; set; }
 

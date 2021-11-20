@@ -1,22 +1,20 @@
-﻿using System;
-using System.Collections.Immutable;
-using IdentityServer4.EntityFramework.Options;
+﻿using IdentityServer4.EntityFramework.Options;
 using Microsoft.EntityFrameworkCore;
-using Januszex.Models;
+using Entities.Models;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace Januszex.Data
+namespace Entities
 {
-    public class ApplicationDbContext : ApiAuthorizationDbContext<User>
+    public class RepositoryContext : ApiAuthorizationDbContext<User>
     {
-        public ApplicationDbContext (DbContextOptions<ApplicationDbContext> options, IOptions<OperationalStoreOptions> operationalStoreOptions) 
-            : base(options, operationalStoreOptions) {}
+        public RepositoryContext(DbContextOptions<RepositoryContext> options, IOptions<OperationalStoreOptions> operationalStoreOptions)
+            : base(options, operationalStoreOptions) { }
         public DbSet<Offer> Offers { get; set; }
         public DbSet<User> Users { get; set; }
-        
+
         public DbSet<Category> Categories { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -45,11 +43,11 @@ namespace Januszex.Data
             modelBuilder.Entity<User>()
                 .Property(u => u.DarkMode)
                 .HasDefaultValue(false);
-            
+
             modelBuilder.Entity<Offer>().ToTable("Offer");
             modelBuilder.Entity<User>().ToTable("Users");
             modelBuilder.Entity<Category>().ToTable("Categories");
-            
+
             SeedUsers(modelBuilder);
             SeedRoles(modelBuilder);
             SeedUserRoles(modelBuilder);

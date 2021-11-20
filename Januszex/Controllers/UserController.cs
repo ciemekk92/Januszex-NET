@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
-using Januszex.Data;
-using Januszex.Models;
+using Entities;
+using Entities.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,9 +11,9 @@ namespace Januszex.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly RepositoryContext _dbContext;
 
-        public UserController(ApplicationDbContext dbContext)
+        public UserController(RepositoryContext dbContext)
         {
             _dbContext = dbContext;
         }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 
-namespace Januszex.Models
+namespace Entities.Models
 {
     public class User : IdentityUser
     {

@@ -4,103 +4,65 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Januszex.Models;
-using Januszex.Data;
+using Entities.Models;
+using Contracts;
+using System;
+using AutoMapper;
+using Entities.DataTransferObjects;
 
 namespace Januszex.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private IRepositoryWrapper _repository;
+        private IMapper _mapper;
 
-        public CategoriesController(ApplicationDbContext context)
+        public CategoriesController(IRepositoryWrapper repository, IMapper mapper)
         {
-            _context = context;
+            _repository = repository;
+            _mapper = mapper;
         }
 
-        // GET: api/Categories
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+        public IActionResult GetAllCategories()
         {
-            return await _context.Categories.ToListAsync();
-        }
-
-        // GET: api/Categories/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetCategory(string id)
-        {
-            var category = await _context.Categories.FindAsync(id);
-
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            return category;
-        }
-
-        // PUT: api/Categories/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCategory(string id, Category category)
-        {
-            if (id != category.CategoryId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(category).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                var categories = _repository.Category.GetAllCategories();
+
+                var categoriesResult = _mapper.Map<IEnumerable<CategoryDTO>>(categories);
+
+                return Ok(categoriesResult);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!CategoryExists(id))
+                return StatusCode(500, "B³¹d serwera.");
+            }
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetCategoryById(string id)
+        {
+            try
+            {
+                var category = _repository.Category.GetCategoryById(id);
+
+                if (category == null)
                 {
                     return NotFound();
                 }
                 else
                 {
-                    throw;
+                    var categoryResult = _mapper.Map<CategoryDTO>(category);
+                    return Ok(categoryResult);
                 }
             }
-
-            return NoContent();
-        }
-
-        // POST: api/Categories
-        [HttpPost]
-        public async Task<ActionResult<Category>> PostCategory(Category category)
-        {
-            _context.Categories.Add(category);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetCategory", new { id = category.CategoryId }, category);
-        }
-
-        // DELETE: api/Categories/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategory(string id)
-        {
-            var category = await _context.Categories.FindAsync(id);
-            if (category == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                return StatusCode(500, "B³¹d serwera.");
             }
-
-            _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool CategoryExists(string id)
-        {
-            return _context.Categories.Any(e => e.CategoryId == id);
         }
     }
 }
