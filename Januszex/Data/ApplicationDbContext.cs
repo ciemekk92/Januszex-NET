@@ -16,6 +16,8 @@ namespace Januszex.Data
             : base(options, operationalStoreOptions) {}
         public DbSet<Offer> Offers { get; set; }
         public DbSet<User> Users { get; set; }
+        
+        public DbSet<Category> Categories { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -36,12 +38,17 @@ namespace Januszex.Data
                 .HasForeignKey(o => o.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Offer>()
+                .HasMany(o => o.Categories)
+                .WithMany(c => c.Offers);
+
             modelBuilder.Entity<User>()
                 .Property(u => u.DarkMode)
                 .HasDefaultValue(false);
             
             modelBuilder.Entity<Offer>().ToTable("Offer");
             modelBuilder.Entity<User>().ToTable("Users");
+            modelBuilder.Entity<Category>().ToTable("Categories");
             
             SeedUsers(modelBuilder);
             SeedRoles(modelBuilder);

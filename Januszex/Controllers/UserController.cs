@@ -8,10 +8,15 @@ namespace Januszex.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
         private readonly ApplicationDbContext _dbContext;
+
+        public UserController(ApplicationDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
         
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> Get(string id)
