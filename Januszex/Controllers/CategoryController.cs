@@ -1,114 +1,106 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Januszex.Data;
-using Januszex.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Januszex.Models;
+using Januszex.Data;
 
 namespace Januszex.Controllers
 {
     [Authorize]
-    [ApiController]
     [Route("api/[controller]")]
-    public class CategoryController : Controller
+    [ApiController]
+    public class CategoriesController : ControllerBase
     {
-        private readonly ApplicationDbContext _dbContext;
-        
-        public CategoryController(ApplicationDbContext dbContext)
+        private readonly ApplicationDbContext _context;
+
+        public CategoriesController(ApplicationDbContext context)
         {
-            _dbContext = dbContext;
+            _context = context;
         }
 
-        // GET: Category
+        // GET: api/Categories
         [HttpGet]
-        public ActionResult<Category> Index()
+        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
         {
-            var categories = _dbContext.Categories.ToList();
+            return await _context.Categories.ToListAsync();
+        }
 
-            if (categories == null)
+        // GET: api/Categories/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Category>> GetCategory(string id)
+        {
+            var category = await _context.Categories.FindAsync(id);
+
+            if (category == null)
             {
                 return NotFound();
             }
 
-            return categories;
+            return category;
         }
 
-        // GET: Category/Details/5
-        public ActionResult Details(int id)
+        // PUT: api/Categories/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutCategory(string id, Category category)
         {
-            return View();
-        }
+            if (id != category.CategoryId)
+            {
+                return BadRequest();
+            }
 
-        // GET: Category/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
+            _context.Entry(category).State = EntityState.Modified;
 
-        // POST: Category/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
             try
             {
-                // TODO: Add insert logic here
-
-                return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
             }
-            catch
+            catch (DbUpdateConcurrencyException)
             {
-                return View();
+                if (!CategoryExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
+
+            return NoContent();
         }
 
-        // GET: Category/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: Category/Edit/5
+        // POST: api/Categories
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult<Category>> PostCategory(Category category)
         {
-            try
-            {
-                // TODO: Add update logic here
+            _context.Categories.Add(category);
+            await _context.SaveChangesAsync();
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return CreatedAtAction("GetCategory", new { id = category.CategoryId }, category);
         }
 
-        // GET: Category/Delete/5
-        public ActionResult Delete(int id)
+        // DELETE: api/Categories/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCategory(string id)
         {
-            return View();
+            var category = await _context.Categories.FindAsync(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            _context.Categories.Remove(category);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
 
-        // POST: Category/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        private bool CategoryExists(string id)
         {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return _context.Categories.Any(e => e.CategoryId == id);
         }
     }
 }
