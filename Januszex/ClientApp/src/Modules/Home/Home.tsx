@@ -4,7 +4,7 @@ import authService from '../api-authorization/AuthorizeService';
 interface Props {}
 
 interface State {
-  name: string;
+  title: string;
   content: string;
 }
 
@@ -15,7 +15,7 @@ export class Home extends React.Component<Props, State> {
     super(props);
 
     this.state = {
-      name: '',
+      title: '',
       content: ''
     };
   }
@@ -30,7 +30,7 @@ export class Home extends React.Component<Props, State> {
   handleSubmit = async () => {
     const token = await authService.getAccessToken();
 
-    const response = await fetch('api/Categories', {
+    const response = await fetch('api/Offer', {
       method: 'POST',
       body: JSON.stringify(this.state),
       headers: !token
@@ -55,9 +55,9 @@ export class Home extends React.Component<Props, State> {
           <li>Ogłoszenia promowane</li>
           <br />
           <input
-            name="name"
+            name="title"
             type="text"
-            value={this.state.name}
+            value={this.state.title}
             onChange={this.onChange}
           />
           <input

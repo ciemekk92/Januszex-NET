@@ -14,12 +14,12 @@ namespace Januszex.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoriesController : ControllerBase
+    public class CategoryController : ControllerBase
     {
         private IRepositoryWrapper _repository;
         private IMapper _mapper;
 
-        public CategoriesController(IRepositoryWrapper repository, IMapper mapper)
+        public CategoryController(IRepositoryWrapper repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;

@@ -8,7 +8,7 @@ namespace Entities.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column("OfferId")]
+        [Column("offer_id")]
         public string Id { get; set; }
         
         [Required(ErrorMessage = "Nazwa ogłoszenia jest wymagana.")]
@@ -17,7 +17,7 @@ namespace Entities.Models
         public string Content { get; set; }
 
         public string Created { get; set; }
-        public string UserId { get; }
+        public string UserId { get; set; }
         public virtual User User { get; set; }
         
         public virtual ICollection<Category> Categories { get; set; }

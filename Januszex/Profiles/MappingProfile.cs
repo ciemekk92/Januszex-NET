@@ -19,6 +19,10 @@ namespace Januszex.Profiles
             CreateMap<CategoryForUpdateDTO, Category>();
 
             CreateMap<Offer, OfferDTO>();
+
+            CreateMap<OfferForCreationDTO, Offer>();
+
+            CreateMap<OfferForUpdateDTO, Offer>();
         }
     }
 }

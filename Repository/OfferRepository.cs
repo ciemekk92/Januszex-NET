@@ -15,5 +15,33 @@ namespace Repository
             : base(repositoryContext)
         {
         }
+
+        public IEnumerable<Offer> GetAllOffers()
+        {
+            return FindAll()
+                .OrderBy(c => c.Title)
+                .ToList();
+        }
+
+        public Offer GetOfferById(string offerId)
+        {
+            return FindByCondition(offer => offer.Id.Equals(offerId))
+                .FirstOrDefault();
+        }
+
+        public void CreateOffer(Offer offer)
+        {
+            Create(offer);
+        }
+
+        public void UpdateOffer(Offer offer)
+        {
+            Update(offer);
+        }
+
+        public void DeleteOffer(Offer offer)
+        {
+            Delete(offer);
+        }
     }
 }
