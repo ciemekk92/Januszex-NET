@@ -42,7 +42,7 @@ namespace Januszex.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name ="CategoryById")]
         public IActionResult GetCategoryById(string id)
         {
             try
@@ -62,6 +62,94 @@ namespace Januszex.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, "Błąd serwera.");
+            }
+        }
+
+        [HttpPost]
+        public IActionResult CreateCategory([FromBody]CategoryForCreationDTO category)
+        {
+            try
+            {
+                if (category == null)
+                {
+                    return BadRequest("Brak kategorii");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Kategoria jest błędna");
+                }
+
+                var categoryEntity = _mapper.Map<Category>(category);
+
+                _repository.Category.CreateCategory(categoryEntity);
+                _repository.Save();
+
+                var createdCategory = _mapper.Map<CategoryDTO>(categoryEntity);
+
+                return CreatedAtRoute("CategoryById", new { id = createdCategory.Id }, createdCategory);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Wewnętrzny błąd serwera." + ex);
+            }
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateCategory(string id, [FromBody]CategoryForUpdateDTO category)
+        {
+            try
+            {
+                if (category == null)
+                {
+                    return BadRequest("Kategoria jest pusta");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Kategoria jest nieprawidłowa");
+                }
+
+                var categoryEntity = _repository.Category.GetCategoryById(id);
+
+                if (categoryEntity == null)
+                {
+                    return NotFound();
+                }
+
+                _mapper.Map(category, categoryEntity);
+
+                _repository.Category.UpdateCategory(categoryEntity);
+                _repository.Save();
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Wewnętrzny błąd serwera" + ex);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteCategory(string id)
+        {
+            try
+            {
+                var category = _repository.Category.GetCategoryById(id);
+
+                if (category == null)
+                {
+                    return NotFound();
+                }
+
+                _repository.Category.DeleteCategory(category);
+                _repository.Save();
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Wewnętrzny błąd serwera" + ex);
             }
         }
     }

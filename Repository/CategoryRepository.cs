@@ -25,5 +25,20 @@ namespace Repository
             return FindByCondition(category => category.Id.Equals(categoryId))
                 .FirstOrDefault();
         }
+
+        public void CreateCategory(Category category)
+        {
+            Create(category);
+        }
+
+        public void UpdateCategory(Category category)
+        {
+            Update(category);
+        }
+
+        public void DeleteCategory(Category category)
+        {
+            Delete(category);
+        }
     }
 }

@@ -1,0 +1,13 @@
+# To learn more about .editorconfig see https://aka.ms/editorconfigdocs
+
+# All files
+[*]
+indent_style = space
+end_of_line=lf
+csharp_space_around_binary_operators=ignore
+
+# Xml files
+[*.xml]
+indent_size = 2
+
+charset = utf-8

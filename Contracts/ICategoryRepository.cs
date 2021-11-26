@@ -7,5 +7,8 @@ namespace Contracts
     {
         IEnumerable<Category> GetAllCategories();
         Category GetCategoryById(string categoryId);
+        void CreateCategory(Category category);
+        void UpdateCategory(Category category);
+        void DeleteCategory(Category category);
     }
 }

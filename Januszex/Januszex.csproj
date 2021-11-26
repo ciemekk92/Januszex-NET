@@ -107,4 +107,12 @@
     </ItemGroup>
   </Target>
 
+  <ItemGroup>
+    <EditorConfigFiles Remove="D:\Projects\Januszex\Januszex\Januszex\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="D:\Projects\Januszex\Januszex\Januszex\.editorconfig" />
+  </ItemGroup>
+
 </Project>

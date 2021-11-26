@@ -10,7 +10,7 @@ namespace Entities.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column("CategoryId")]
+        [Column("category_id")]
         public string Id { get; set; }
         
         [Required(ErrorMessage = "Nazwa kategorii jest wymagana.")]
@@ -18,6 +18,8 @@ namespace Entities.Models
         public string Name { get; set; }
         
         [DataType(DataType.Date)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        [Column("created")]
         public DateTime Created { get; set; }
 
         public string ParentCategoryId { get; set; }
