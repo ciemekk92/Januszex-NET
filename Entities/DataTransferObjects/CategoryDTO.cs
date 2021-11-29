@@ -11,5 +11,7 @@ namespace Entities.DataTransferObjects
         public string Id { get; set; }
         public string Name { get; set; }
         public string Created { get; set; }
+
+        public ICollection<OfferDTO> Offers { get; set; }
     }
 }

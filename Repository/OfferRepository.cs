@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Contracts;
 using Entities;
+using Entities.Helpers;
 using Entities.Models;
 
 namespace Repository
@@ -16,11 +13,12 @@ namespace Repository
         {
         }
 
-        public IEnumerable<Offer> GetAllOffers()
+        public PagedList<Offer> GetAllOffers(OfferParameters offerParameters)
         {
-            return FindAll()
-                .OrderBy(c => c.Title)
-                .ToList();
+            var offers = FindByCondition(o => o.Categories.Any(c => c.Id == offerParameters.CategoryId))
+                .OrderBy(o => o.Title);
+
+            return PagedList<Offer>.ToPagedList(offers, offerParameters.PageNumber, offerParameters.PageSize);   
         }
 
         public Offer GetOfferById(string offerId)

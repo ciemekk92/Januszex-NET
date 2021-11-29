@@ -17,6 +17,7 @@ namespace Entities
 
         public DbSet<Category> Category { get; set; }
 
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseNpgsql().UseSnakeCaseNamingConvention();
@@ -39,6 +40,10 @@ namespace Entities
             modelBuilder.Entity<Offer>()
                 .HasMany(o => o.Categories)
                 .WithMany(c => c.Offers);
+
+            modelBuilder.Entity<Category>()
+                .Property(c => c.Created)
+                .HasDefaultValueSql("current_timestamp");
 
             modelBuilder.Entity<User>()
                 .Property(u => u.DarkMode)

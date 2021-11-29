@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using Entities.Helpers;
 using Entities.Models;
 
 namespace Contracts
 {
     public interface IOfferRepository
     {   
-        IEnumerable<Offer> GetAllOffers();
+        PagedList<Offer> GetAllOffers(OfferParameters offerParameters);
         Offer GetOfferById(string offerId);
         void CreateOffer(Offer offer);
         void UpdateOffer(Offer offer);

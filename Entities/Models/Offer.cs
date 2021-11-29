@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Entities.Models
 {
@@ -20,6 +21,7 @@ namespace Entities.Models
         public string UserId { get; set; }
         public virtual User User { get; set; }
         
+        [JsonIgnore]
         public virtual ICollection<Category> Categories { get; set; }
     }
 }

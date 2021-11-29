@@ -21,7 +21,7 @@ namespace Januszex.Profiles
             CreateMap<Offer, OfferDTO>();
 
             CreateMap<OfferForCreationDTO, Offer>();
-
+                
             CreateMap<OfferForUpdateDTO, Offer>();
         }
     }

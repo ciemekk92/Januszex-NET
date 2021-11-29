@@ -5,6 +5,7 @@ using Entities.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
@@ -27,11 +28,23 @@ namespace Januszex.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllOffers()
+        public IActionResult GetAllOffers([FromQuery] OfferParameters offerParameters)
         {
             try
             {
-                var offers = _repository.Offer.GetAllOffers();
+                var offers = _repository.Offer.GetAllOffers(offerParameters);
+
+                var metadata = new
+                {
+                    offers.TotalCount,
+                    offers.PageSize,
+                    offers.CurrentPage,
+                    offers.TotalPages,
+                    offers.HasNext,
+                    offers.HasPrevious
+                };
+
+                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
 
                 var offersResult = _mapper.Map<IEnumerable<OfferDTO>>(offers);
 
@@ -66,7 +79,6 @@ namespace Januszex.Controllers
             }
         }
 
-        [Authorize]
         [HttpPost]
         public IActionResult CreateOffer([FromBody] OfferForCreationDTO offer)
         {
@@ -83,12 +95,18 @@ namespace Januszex.Controllers
                 }
 
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                var category = _repository.Category.GetCategoryById(offer.CategoryIds[0]);
                 
                 var offerEntity = _mapper.Map<Offer>(offer);
 
+                category.Offers = new List<Offer>();
+                category.Offers.Add(offerEntity);
                 offerEntity.UserId = userId;
+                offerEntity.Categories.Add(category);
 
                 _repository.Offer.CreateOffer(offerEntity);
+                _repository.Category.UpdateCategory(category);
                 _repository.Save();
 
                 var createdOffer = _mapper.Map<OfferDTO>(offerEntity);
