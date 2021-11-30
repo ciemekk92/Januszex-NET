@@ -1,9 +1,5 @@
 ﻿using Entities.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Entities.DataTransferObjects
 {
@@ -13,7 +9,9 @@ namespace Entities.DataTransferObjects
         public string Title { get; set; }
         public string Content { get; set; }
         public string Created { get; set; }
+        public bool IsActive { get; set; }
 
+        public Location Location { get; set; }
         public ICollection<Category> Categories { get; set; }
     }
 }

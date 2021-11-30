@@ -14,8 +14,9 @@ namespace Entities
             : base(options, operationalStoreOptions) { }
         public DbSet<Offer> Offer { get; set; }
         public DbSet<User> Users { get; set; }
-
         public DbSet<Category> Category { get; set; }
+        public DbSet<City> City { get; set; }
+        public DbSet<Region> Region { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -32,6 +33,10 @@ namespace Entities
                 .HasDefaultValueSql("current_timestamp");
 
             modelBuilder.Entity<Offer>()
+                .Property(o => o.IsActive)
+                .HasDefaultValue(true);
+
+            modelBuilder.Entity<Offer>()
                 .HasOne(o => o.User)
                 .WithMany(u => u.Offers)
                 .HasForeignKey(o => o.UserId)
@@ -41,6 +46,10 @@ namespace Entities
                 .HasMany(o => o.Categories)
                 .WithMany(c => c.Offers);
 
+            modelBuilder.Entity<Offer>()
+                .HasMany(o => o.Photos)
+                .WithOne(p => p.Offer);
+
             modelBuilder.Entity<Category>()
                 .Property(c => c.Created)
                 .HasDefaultValueSql("current_timestamp");
@@ -49,9 +58,19 @@ namespace Entities
                 .Property(u => u.DarkMode)
                 .HasDefaultValue(false);
 
+
+            modelBuilder.Entity<Location>()
+                .HasOne(l => l.City);
+
+            modelBuilder.Entity<Location>()
+                .HasOne(l => l.Region);
+
             modelBuilder.Entity<Offer>().ToTable("Offer");
             modelBuilder.Entity<User>().ToTable("Users");
             modelBuilder.Entity<Category>().ToTable("Category");
+            modelBuilder.Entity<Location>().ToTable("Location");
+            modelBuilder.Entity<City>().ToTable("City");
+            modelBuilder.Entity<Region>().ToTable("Region");
 
             SeedUsers(modelBuilder);
             SeedRoles(modelBuilder);

@@ -11,8 +11,10 @@ namespace Entities.DataTransferObjects
         public string Title { get; set; }
 
         [Required(ErrorMessage = "Treść jest wymagana")]
-        [StringLength(500, ErrorMessage = "Treść nie może być dłuższa niż 500 znaków")]
+        [StringLength(4000, ErrorMessage = "Opis nie może być dłuższy niż 4000 znaków.")]
         public string Content { get; set; }
+
+        public Location Location { get; set; }
 
         public List<string> CategoryIds { get; set; }
 

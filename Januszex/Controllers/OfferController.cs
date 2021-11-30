@@ -94,19 +94,26 @@ namespace Januszex.Controllers
                     return BadRequest("Ogłoszenie jest błędne");
                 }
 
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (offer.CategoryIds == null || offer.CategoryIds.Count == 0)
+                {
+                    return BadRequest("Musisz wybrać od 1 do 3 kategorii.");
+                }
 
-                var category = _repository.Category.GetCategoryById(offer.CategoryIds[0]);
-                
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var offerEntity = _mapper.Map<Offer>(offer);
 
-                category.Offers = new List<Offer>();
-                category.Offers.Add(offerEntity);
                 offerEntity.UserId = userId;
-                offerEntity.Categories.Add(category);
+
+                foreach (var categoryId in offer.CategoryIds)
+                {
+                    var category = _repository.Category.GetCategoryById(categoryId);
+                    category.Offers = new List<Offer>();
+                    category.Offers.Add(offerEntity);
+                    offerEntity.Categories.Add(category);
+                    _repository.Category.UpdateCategory(category);
+                }
 
                 _repository.Offer.CreateOffer(offerEntity);
-                _repository.Category.UpdateCategory(category);
                 _repository.Save();
 
                 var createdOffer = _mapper.Map<OfferDTO>(offerEntity);

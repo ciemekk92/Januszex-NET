@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Entities.Helpers;
+﻿using Entities.Helpers;
 using Entities.Models;
 
 namespace Contracts
