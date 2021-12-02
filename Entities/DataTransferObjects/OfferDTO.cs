@@ -11,7 +11,9 @@ namespace Entities.DataTransferObjects
         public string Created { get; set; }
         public bool IsActive { get; set; }
 
-        public Location Location { get; set; }
-        public ICollection<Category> Categories { get; set; }
+        public LocationDTO Location { get; set; }
+
+        public User User { get; }
+        public ICollection<OfferCategoryDTO> Categories { get; set; }
     }
 }

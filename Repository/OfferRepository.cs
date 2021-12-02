@@ -3,6 +3,7 @@ using Contracts;
 using Entities;
 using Entities.Helpers;
 using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Repository
 {
@@ -15,15 +16,44 @@ namespace Repository
 
         public PagedList<Offer> GetAllOffers(OfferParameters offerParameters)
         {
-            var offers = FindByCondition(o => o.Categories.Any(c => c.Id == offerParameters.CategoryId))
-                .OrderBy(o => o.Title);
+            if (offerParameters.CategoryId != null)
+            {
+                var filteredOffers = FindByCondition(o => o.Categories.Any(c => c.Id == offerParameters.CategoryId))
+                    .Include(o => o.Categories)
+                    .Include(o => o.Location)
+                    .OrderBy(o => o.Title);
 
-            return PagedList<Offer>.ToPagedList(offers, offerParameters.PageNumber, offerParameters.PageSize);   
+                SearchByTitle(ref filteredOffers, offerParameters.Title);
+
+                return PagedList<Offer>.ToPagedList(filteredOffers, offerParameters.PageNumber, offerParameters.PageSize);
+            } else
+            {
+                var offers = FindAll()
+                    .Include(o => o.Categories)
+                    .Include(o => o.Location).ThenInclude(l => l.City)
+                    .Include(o => o.Location).ThenInclude(l => l.Region)
+                    .OrderBy(c => c.Title);
+
+                SearchByTitle(ref offers, offerParameters.Title);
+
+                return PagedList<Offer>.ToPagedList(offers, offerParameters.PageNumber, offerParameters.PageSize);
+
+            }
+        }
+
+        private void SearchByTitle(ref IOrderedQueryable<Offer> offers, string offerTitle)
+        {
+            if (!offers.Any() || string.IsNullOrWhiteSpace(offerTitle))
+                return;
+
+            offers = offers.Where(o => o.Title.ToLower().Contains(offerTitle.Trim().ToLower())).OrderBy(c => c.Title);
         }
 
         public Offer GetOfferById(string offerId)
         {
             return FindByCondition(offer => offer.Id.Equals(offerId))
+                .Include(o => o.Categories)
+                .Include(o => o.Location)
                 .FirstOrDefault();
         }
 

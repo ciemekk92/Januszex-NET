@@ -14,6 +14,10 @@ namespace Januszex.Profiles
         {
             CreateMap<Category, CategoryDTO>();
 
+            CreateMap<Category, OfferCategoryDTO>();
+
+            CreateMap<OfferCategoryDTO, Category>();
+
             CreateMap<CategoryForCreationDTO, Category>();
 
             CreateMap<CategoryForUpdateDTO, Category>();
@@ -23,6 +27,8 @@ namespace Januszex.Profiles
             CreateMap<OfferForCreationDTO, Offer>();
                 
             CreateMap<OfferForUpdateDTO, Offer>();
+
+            CreateMap<Location, LocationDTO>();
         }
     }
 }

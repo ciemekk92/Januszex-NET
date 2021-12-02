@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Entities.Models
+﻿namespace Entities.Models
 {
     public class OfferParameters : QueryStringParameters
     {
-        public string CategoryId { get; set; }
+        #nullable enable
+        public string? CategoryId { get; set; }
+        public string? Title { get; set; }
     }
 }
