@@ -1,98 +1,94 @@
 import React from 'react';
 import authService from '../api-authorization/AuthorizeService';
+import { HomePageSearch } from 'Modules/HomePageSearch';
+import { AllOffers } from 'Modules/AllOffers';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { ApplicationState } from '../../Stores/store';
+import { actionCreators } from '../../Stores/Offer';
 
-interface Props {}
-
-interface State {
-  inputData: {
-    title: string;
-    content: string;
-  };
-  categories: {
-    id: string;
-    name: string;
-    created: string;
-  }[];
-  selectedCategories: string[];
+interface Category {
+  id: string;
+  name: string;
+  created: string;
 }
 
-export class Home extends React.Component<Props, State> {
-  static displayName = Home.name;
+interface InputData {
+  title: string;
+  content: string;
+}
 
-  constructor(props: Props) {
-    super(props);
+const initialInputData: InputData = {
+  title: '',
+  content: ''
+};
 
-    this.state = {
-      inputData: {
-        title: '',
-        content: ''
-      },
-      categories: [],
-      selectedCategories: []
-    };
-  }
+export const Home = (): JSX.Element => {
+  const [inputData, setInputData] = React.useState<InputData>(initialInputData);
+  const [categories, setCategories] = React.useState<Category[]>([]);
+  const [selectedCategories, setSelectedCategories] = React.useState<string[]>(
+    []
+  );
 
-  async componentDidMount() {
-    await this.handleLoadingCategories();
-  }
+  const dispatch = useDispatch();
+  const offers = useSelector(
+    (state: ApplicationState) => (state.offer ? state.offer.offers : []),
+    shallowEqual
+  );
 
-  get categoriesList() {
-    return this.state.categories.map((category) => (
-      <li>
-        <input
-          checked={this.state.selectedCategories.includes(category.id)}
-          type="checkbox"
-          onChange={this.handleSelectingCategory(category.id)}
-        />
-        {category.name} | Stworzona: {category.created}
-      </li>
-    ));
-  }
-
-  onChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({
-      ...this.state,
-      inputData: {
-        ...this.state.inputData,
-        [target.name]: target.value
-      }
-    });
-  };
-
-  handleLoadingCategories = async () => {
+  const handleLoadingCategories = async () => {
     const response = await fetch('/api/Category', {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
     });
 
     const categoriesData = await response.json();
-    this.setState({ ...this.state, categories: categoriesData });
+    setCategories(categoriesData);
   };
 
-  handleSelectingCategory = (id: string) => () => {
-    if (this.state.selectedCategories.includes(id)) {
-      this.setState({
-        ...this.state,
-        selectedCategories: this.state.selectedCategories.filter(
-          (el) => el !== id
-        )
-      });
+  const onChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+    setInputData({
+      ...inputData,
+      [target.name]: target.value
+    });
+  };
+
+  const handleFetchingOffers = (query: string) => {
+    dispatch(actionCreators.getOffers({ query }));
+  };
+
+  const handleSearch = (query: string) => {
+    handleFetchingOffers(query);
+  };
+
+  const handleSelectingCategory = (id: string) => () => {
+    if (selectedCategories.includes(id)) {
+      setSelectedCategories(selectedCategories.filter((el) => el !== id));
     } else {
-      this.setState({
-        ...this.state,
-        selectedCategories: [...this.state.selectedCategories, id]
-      });
+      setSelectedCategories([...selectedCategories, id]);
     }
   };
 
-  handleSubmit = async () => {
+  const renderCategoriesList = () => {
+    return categories.map((category) => (
+      <li>
+        <input
+          checked={selectedCategories.includes(category.id)}
+          type="checkbox"
+          onChange={handleSelectingCategory(category.id)}
+        />
+        {category.name} | Stworzona: {category.created}
+      </li>
+    ));
+  };
+
+  const handleSubmit = async () => {
     const token = await authService.getAccessToken();
 
     const response = await fetch('api/Offer', {
       method: 'POST',
       body: JSON.stringify({
-        ...this.state.inputData,
-        categoryIds: this.state.selectedCategories
+        ...inputData,
+        categoryIds: selectedCategories
       }),
       headers: !token
         ? { 'Content-Type': 'application/json' }
@@ -102,36 +98,40 @@ export class Home extends React.Component<Props, State> {
           }
     });
 
-    const data = await response.json();
-    console.log({ data });
+    if (response.status === 201) {
+      handleFetchingOffers('');
+    }
   };
 
-  render() {
-    return (
-      <div>
-        Strona główna
-        <ul>
-          <li>Wyszukiwarka</li>
-          <li>Kategorie</li>
-          <li>Ogłoszenia promowane</li>
-          <br />
-          <ol>{this.categoriesList}</ol>
-          <br />
-          <input
-            name="title"
-            type="text"
-            value={this.state.inputData.title}
-            onChange={this.onChange}
-          />
-          <input
-            name="content"
-            type="text"
-            value={this.state.inputData.content}
-            onChange={this.onChange}
-          />
-          <button onClick={this.handleSubmit}>KLIK</button>
-        </ul>
-      </div>
-    );
-  }
-}
+  React.useEffect(() => {
+    handleLoadingCategories();
+  }, []);
+
+  return (
+    <div>
+      <HomePageSearch handleSearch={handleSearch} />
+      <ul>
+        <li>Wyszukiwarka</li>
+        <li>Kategorie</li>
+        <li>Ogłoszenia promowane</li>
+        <br />
+        <ol>{renderCategoriesList()}</ol>
+        <br />
+        <input
+          name="title"
+          type="text"
+          value={inputData.title}
+          onChange={onChange}
+        />
+        <input
+          name="content"
+          type="text"
+          value={inputData.content}
+          onChange={onChange}
+        />
+        <button onClick={handleSubmit}>KLIK</button>
+        <AllOffers data={offers} />
+      </ul>
+    </div>
+  );
+};

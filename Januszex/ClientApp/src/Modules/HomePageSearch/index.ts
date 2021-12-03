@@ -1,0 +1,1 @@
+export { HomePageSearch } from './HomePageSearch';
