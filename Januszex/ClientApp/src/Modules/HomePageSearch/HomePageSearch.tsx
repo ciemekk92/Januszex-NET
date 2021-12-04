@@ -1,12 +1,15 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { actionCreators } from 'Stores/Offer';
 import { StyledContainer, StyledInput } from './HomePageSearch.styled';
 
-interface Props {
-  handleSearch: (query: string) => void;
-}
-
-export const HomePageSearch = ({ handleSearch }: Props): JSX.Element => {
+export const HomePageSearch = (): JSX.Element => {
   const [query, setQuery] = React.useState<string>('');
+  const dispatch = useDispatch();
+
+  const handleFetchingOffers = (query: string) => {
+    dispatch(actionCreators.getOffers({ query }));
+  };
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
@@ -14,13 +17,18 @@ export const HomePageSearch = ({ handleSearch }: Props): JSX.Element => {
 
   const handleSubmit = async (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      await handleSearch(query);
+      await handleFetchingOffers(query);
     }
   };
 
   return (
     <StyledContainer>
-      <StyledInput value={query} onChange={onChange} onKeyDown={handleSubmit} />
+      <StyledInput
+        placeholder={}
+        value={query}
+        onChange={onChange}
+        onKeyDown={handleSubmit}
+      />
     </StyledContainer>
   );
 };

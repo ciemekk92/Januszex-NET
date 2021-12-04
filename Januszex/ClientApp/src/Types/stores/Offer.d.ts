@@ -8,6 +8,7 @@ export interface IOffer {
   content: string;
   created: string;
   isActive: boolean;
+  price: number;
   location: ILocation;
   user: IUserForOffer;
   categories: ICategory[];

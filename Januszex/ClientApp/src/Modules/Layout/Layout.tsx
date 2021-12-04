@@ -1,17 +1,17 @@
 import React from 'react';
-import { Container } from 'reactstrap';
-
 import { NavMenu } from 'Modules/NavMenu';
+
+import { StyledContainer } from './Layout.styled';
 
 export class Layout extends React.Component {
   static displayName = Layout.name;
 
   render() {
     return (
-      <div>
+      <StyledContainer>
         <NavMenu />
-        <Container>{this.props.children}</Container>
-      </div>
+        <div>{this.props.children}</div>
+      </StyledContainer>
     );
   }
 }

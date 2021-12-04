@@ -15,7 +15,7 @@ namespace Entities.DataTransferObjects
         public string Content { get; set; }
 
         public Location Location { get; set; }
-        public float Price { get; set; }
+        public decimal Price { get; set; }
         public List<string> CategoryIds { get; set; }
         public ICollection<CategoryDTO> Categories { get; set; }
     }

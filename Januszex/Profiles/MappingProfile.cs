@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
 using Entities.DataTransferObjects;
+using Entities.Helpers;
 using Entities.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Januszex.Profiles
 {
@@ -22,11 +19,14 @@ namespace Januszex.Profiles
 
             CreateMap<CategoryForUpdateDTO, Category>();
 
-            CreateMap<Offer, OfferDTO>();
+            CreateMap<Offer, OfferDTO>()
+                .ForMember(o => o.Price, opt => opt.ConvertUsing(new PriceFormatter()));
 
-            CreateMap<OfferForCreationDTO, Offer>();
-                
-            CreateMap<OfferForUpdateDTO, Offer>();
+            CreateMap<OfferForCreationDTO, Offer>()
+                .ForMember(o => o.Price, opt => opt.ConvertUsing(new PriceFormatter()));
+
+            CreateMap<OfferForUpdateDTO, Offer>()
+                .ForMember(o => o.Price, opt => opt.ConvertUsing(new PriceFormatter()));
 
             CreateMap<Location, LocationDTO>();
         }

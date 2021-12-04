@@ -19,7 +19,7 @@ namespace Entities.Models
         [StringLength(4000, ErrorMessage = "Opis nie może być dłuższy niż 4000 znaków.")]
         public string Content { get; set; }
         
-        public float Price { get; set; }
+        public decimal Price { get; set; }
         public bool IsActive { get; set; }
 
         [DataType(DataType.Date)]
