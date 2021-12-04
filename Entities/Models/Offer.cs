@@ -18,7 +18,8 @@ namespace Entities.Models
 
         [StringLength(4000, ErrorMessage = "Opis nie może być dłuższy niż 4000 znaków.")]
         public string Content { get; set; }
-
+        
+        public float Price { get; set; }
         public bool IsActive { get; set; }
 
         [DataType(DataType.Date)]
@@ -29,7 +30,6 @@ namespace Entities.Models
         public string LocationId { get; set; }
         public virtual Location Location { get; set; }
         public virtual User User { get; set; }
-
         public virtual ICollection<Photo> Photos { get; set; }
         
         [JsonIgnore]

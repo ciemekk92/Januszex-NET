@@ -8,6 +8,7 @@ namespace Entities.DataTransferObjects
         public string Id { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
+        public float Price { get; set; }
         public string Created { get; set; }
         public bool IsActive { get; set; }
 

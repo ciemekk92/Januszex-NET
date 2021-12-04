@@ -33,6 +33,10 @@ namespace Entities
                 .HasDefaultValueSql("current_timestamp");
 
             modelBuilder.Entity<Offer>()
+                .Property(o => o.Price)
+                .HasDefaultValue(0);
+
+            modelBuilder.Entity<Offer>()
                 .Property(o => o.IsActive)
                 .HasDefaultValue(true);
 
