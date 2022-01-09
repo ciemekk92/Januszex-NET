@@ -11,6 +11,12 @@
   "addOffer": {
     "title": "Nazwa",
     "content": "Treść",
-    "price": "Cena (PLN)"
+    "price": "Cena (PLN)",
+    "locationLabel": "Lokalizacja",
+    "street": "Ulica",
+    "postalCode": "Kod pocztowy",
+    "city": "Miasto",
+    "region": "Województwo",
+    "submit": "Dodaj ogłoszenie"
   }
 }

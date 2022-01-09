@@ -11,6 +11,12 @@
   "addOffer": {
     "title": "Title",
     "content": "Content",
-    "price": "Price (PLN)"
+    "price": "Price (PLN)",
+    "locationLabel": "Location",
+    "street": "Street",
+    "postalCode": "Postal Code",
+    "city": "City",
+    "region": "Region",
+    "submit": "Add Offer"
   }
 }
