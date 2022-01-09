@@ -1,0 +1,16 @@
+{
+  "title": "Welcome",
+  "navigation": {
+    "home": "Home page",
+    "signUp": "Sign Up",
+    "login": "Log in",
+    "greeting": "Hello,",
+    "logout": "Log out",
+    "add": "Add Offer"
+  },
+  "addOffer": {
+    "title": "Title",
+    "content": "Content",
+    "price": "Price (PLN)"
+  }
+}

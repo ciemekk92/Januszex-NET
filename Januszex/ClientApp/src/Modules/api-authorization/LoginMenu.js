@@ -1,12 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import { NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { withTranslation } from 'react-i18next';
 
 import authService from './AuthorizeService';
 import { NavItem } from '../NavMenu/NavMenu.styled';
 import { ApplicationPaths } from './ApiAuthorizationConstants';
 
-export class LoginMenu extends Component {
+class LoginMenu extends Component {
   constructor(props) {
     super(props);
 
@@ -53,16 +54,18 @@ export class LoginMenu extends Component {
   }
 
   authenticatedView(userName, profilePath, logoutPath) {
+    const { t } = this.props;
+
     return (
       <Fragment>
         <NavItem>
           <NavLink tag={Link} className="text-dark" to={profilePath}>
-            Cześć {userName}
+            {`${t('navigation.greeting')} ${userName}`}
           </NavLink>
         </NavItem>
         <NavItem>
           <NavLink tag={Link} className="text-dark" to={logoutPath}>
-            Wyloguj się
+            {t('navigation.logout')}
           </NavLink>
         </NavItem>
       </Fragment>
@@ -70,19 +73,23 @@ export class LoginMenu extends Component {
   }
 
   anonymousView(registerPath, loginPath) {
+    const { t } = this.props;
+
     return (
       <Fragment>
         <NavItem>
           <NavLink tag={Link} className="text-dark" to={registerPath}>
-            Rejestracja
+            {t('navigation.signUp')}
           </NavLink>
         </NavItem>
         <NavItem>
           <NavLink tag={Link} className="text-dark" to={loginPath}>
-            Zaloguj się
+            {t('navigation.login')}
           </NavLink>
         </NavItem>
       </Fragment>
     );
   }
 }
+
+export default withTranslation()(LoginMenu);

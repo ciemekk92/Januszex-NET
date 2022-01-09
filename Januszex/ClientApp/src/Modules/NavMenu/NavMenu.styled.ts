@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { NavLink } from 'reactstrap';
 
 export const NavItem = styled.li`
   font-family: 'Lato', sans-serif;

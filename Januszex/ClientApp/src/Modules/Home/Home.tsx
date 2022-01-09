@@ -3,6 +3,7 @@ import { shallowEqual, useSelector } from 'react-redux';
 import { HomePageSearch } from 'Modules/HomePageSearch';
 import { AllOffers } from 'Modules/AllOffers';
 import { ApplicationState } from 'Stores/store';
+import { useTranslation } from 'react-i18next';
 
 export const Home = (): JSX.Element => {
   const offers = useSelector(
@@ -10,8 +11,18 @@ export const Home = (): JSX.Element => {
     shallowEqual
   );
 
+  const { i18n } = useTranslation();
+
+  const changeLanguage = async (lng: string) => {
+    await i18n.changeLanguage(lng);
+  };
+
   return (
     <React.Fragment>
+      <div style={{ display: 'flex' }}>
+        <button onClick={() => changeLanguage('pl')}>pl</button>
+        <button onClick={() => changeLanguage('en-US')}>en</button>
+      </div>
       <HomePageSearch />
       <AllOffers data={offers} />
     </React.Fragment>

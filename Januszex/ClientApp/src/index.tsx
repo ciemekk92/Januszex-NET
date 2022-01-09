@@ -12,9 +12,11 @@ const rootElement = document.getElementById('root');
 
 ReactDOM.render(
   <BrowserRouter basename={baseUrl}>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <React.Suspense fallback="Loading...">
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </React.Suspense>
   </BrowserRouter>,
   rootElement
 );

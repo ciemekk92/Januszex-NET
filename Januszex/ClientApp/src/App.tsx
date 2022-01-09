@@ -10,6 +10,7 @@ import { ApplicationPaths } from 'Modules/api-authorization/ApiAuthorizationCons
 
 import './custom.css';
 import { darkTheme, GlobalStyles } from 'Themes';
+import { Routes } from './Routes/Routes';
 
 export default class App extends Component {
   static displayName = App.name;
@@ -20,11 +21,12 @@ export default class App extends Component {
         <GlobalStyles themeType="dark" />
         <Layout>
           <Route exact path="/" component={Home} />
-          <AuthorizeRoute path="/fetch-data" component={FetchData} />
+          {/*<AuthorizeRoute path="/fetch-data" component={FetchData} />*/}
           <Route
             path={ApplicationPaths.ApiAuthorizationPrefix}
             component={ApiAuthorizationRoutes}
           />
+          <Routes />
         </Layout>
       </ThemeProvider>
     );

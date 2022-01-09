@@ -1,0 +1,16 @@
+{
+  "title": "Witaj",
+  "navigation": {
+    "home": "Strona główna",
+    "signUp": "Rejestracja",
+    "login": "Zaloguj się",
+    "greeting": "Cześć,",
+    "logout": "Wyloguj się",
+    "add": "Dodaj ogłoszenie"
+  },
+  "addOffer": {
+    "title": "Nazwa",
+    "content": "Treść",
+    "price": "Cena (PLN)"
+  }
+}

@@ -10,6 +10,8 @@ export const StyledInput = styled.input`
   height: 5.6rem;
   font-size: 3.6rem;
   padding: 1rem;
+  border-radius: 1rem;
+  border: none;
 
   &:focus {
     outline: none;

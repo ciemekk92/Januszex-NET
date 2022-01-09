@@ -8,19 +8,24 @@ import {
   NavLink
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { withTranslation } from 'react-i18next';
 
-import { LoginMenu } from 'Modules/api-authorization/LoginMenu';
+import { TranslateFunction } from 'Types/modules';
+import LoginMenu from 'Modules/api-authorization/LoginMenu';
 import { Logo } from '../Logo';
 import { NavItem } from './NavMenu.styled';
 
 import './NavMenu.css';
 
-interface Props {}
+interface Props {
+  t: TranslateFunction;
+}
+
 interface State {
   collapsed: boolean;
 }
 
-export class NavMenu extends React.Component<Props, State> {
+class NavMenu extends React.Component<Props, State> {
   static displayName = NavMenu.name;
 
   constructor(props: Props) {
@@ -38,6 +43,8 @@ export class NavMenu extends React.Component<Props, State> {
   };
 
   render() {
+    const { t } = this.props;
+
     return (
       <header>
         <Navbar
@@ -57,12 +64,12 @@ export class NavMenu extends React.Component<Props, State> {
               <ul className="navbar-nav flex-grow">
                 <NavItem>
                   <NavLink tag={Link} className="text-dark" to="/">
-                    Strona główna
+                    {t('navigation.home')}
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/fetch-data">
-                    Fetch data
+                  <NavLink tag={Link} className="text-dark" to="/add-offer">
+                    {t('navigation.add')}
                   </NavLink>
                 </NavItem>
                 <LoginMenu />
@@ -74,3 +81,5 @@ export class NavMenu extends React.Component<Props, State> {
     );
   }
 }
+
+export default withTranslation()(NavMenu);

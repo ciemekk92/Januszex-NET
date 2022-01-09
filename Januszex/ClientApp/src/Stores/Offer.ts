@@ -8,6 +8,7 @@ import { isDefined } from 'Utils/isDefined';
 export interface OfferState {
   isLoading: boolean;
   offers: IOffer[];
+  offer: IOffer;
 }
 
 interface SetOffersAction {
@@ -15,12 +16,20 @@ interface SetOffersAction {
   offers: IOffer[];
 }
 
+interface SetOfferAction {
+  type: typeof ActionTypes.SET_OFFER;
+  offer: IOffer;
+}
+
 interface SetLoadingAction {
   type: typeof ActionTypes.SET_LOADING;
   isLoading: boolean;
 }
 
-export type OfferActionTypes = SetOffersAction | SetLoadingAction;
+export type OfferActionTypes =
+  | SetOffersAction
+  | SetOfferAction
+  | SetLoadingAction;
 
 export const actionCreators = {
   getOffers:
@@ -45,12 +54,78 @@ export const actionCreators = {
           });
         }
       }
+    },
+  getOffer:
+    (id: Id): AppThunkAction<OfferActionTypes> =>
+    async (dispatch, getState) => {
+      const appState = getState();
+
+      await dispatch({
+        type: ActionTypes.SET_LOADING,
+        isLoading: true
+      });
+
+      if (appState && appState.offer) {
+        const result = await Api.get(`api/Offer/${id}`);
+
+        if (result.status === 200) {
+          const json = await result.json();
+
+          dispatch({
+            type: ActionTypes.SET_OFFER,
+            offer: json
+          });
+        }
+      }
+    },
+  createOffer:
+    (data: IOffer): AppThunkAction<OfferActionTypes> =>
+    async (dispatch, getState) => {
+      const appState = getState();
+
+      await dispatch({
+        type: ActionTypes.SET_LOADING,
+        isLoading: true
+      });
+
+      if (appState && appState.offer) {
+        const result = await Api.post('api/Offer', data);
+
+        if (result.status === 201) {
+          await actionCreators.getOffers({ query: '' });
+        }
+      }
     }
 };
 
 const initialState: OfferState = {
   isLoading: false,
-  offers: []
+  offers: [],
+  offer: {
+    id: '',
+    title: '',
+    categories: [],
+    content: '',
+    created: '',
+    isActive: false,
+    price: 0,
+    user: {
+      id: ''
+    },
+    location: {
+      id: '',
+      street: '',
+      postalCode: '',
+      city: {
+        id: '',
+        name: ''
+      },
+      region: {
+        id: '',
+        name: ''
+      }
+    }
+  }
 };
 
 export const reducer: Reducer<OfferState> = (
@@ -66,7 +141,14 @@ export const reducer: Reducer<OfferState> = (
   switch (action.type) {
     case ActionTypes.SET_OFFERS:
       return {
+        ...state,
         offers: action.offers,
+        isLoading: false
+      };
+    case ActionTypes.SET_OFFER:
+      return {
+        ...state,
+        offer: action.offer,
         isLoading: false
       };
     case ActionTypes.SET_LOADING:
