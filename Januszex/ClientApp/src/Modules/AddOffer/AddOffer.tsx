@@ -1,22 +1,27 @@
 import React from 'react';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+
 import { useTranslation } from 'react-i18next';
 
+import { actionCreators as offerActionCreators } from 'Stores/Offer';
+import { actionCreators as categoryActionCreators } from 'Stores/Category';
+import { ICategory, IOfferForCreation } from 'Types/stores';
 import { TextInput } from 'Shared/TextInput';
-import { IOffer } from 'Types/stores';
 import { TextArea } from 'Shared/TextArea';
 import { FormField } from 'Shared/FormField';
 import { NumericInput } from 'Shared/NumericInput';
 import { Heading5 } from 'Shared/Typography';
+import { ButtonFilled } from 'Shared/ButtonFilled';
+import { MultiSelect } from 'Shared/MultiSelect';
+
 import { StyledColumn, StyledRow, Wrapper } from './AddOffer.styled';
-import { ButtonFilled } from '../../Shared/ButtonFilled';
-import { useDispatch } from 'react-redux';
-import { actionCreators } from '../../Stores/Offer';
+import { ApplicationState } from '../../Stores/store';
 
 export const AddOffer = (): JSX.Element => {
-  const initialData: IOffer = {
+  const initialData: IOfferForCreation = {
     id: '',
     title: '',
-    categories: [],
+    categoryIds: [],
     content: '',
     created: '',
     isActive: false,
@@ -25,29 +30,42 @@ export const AddOffer = (): JSX.Element => {
       id: ''
     },
     location: {
-      id: '',
       street: '',
       postalCode: '',
       city: {
-        id: '',
         name: ''
       },
       region: {
-        id: '',
         name: ''
       }
     }
   };
 
-  const [inputData, setInputData] = React.useState<IOffer>(initialData);
+  const [inputData, setInputData] =
+    React.useState<IOfferForCreation>(initialData);
+
+  const categories = useSelector(
+    (state: ApplicationState) =>
+      state.category ? state.category.categories : [],
+    shallowEqual
+  );
 
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
+  React.useEffect(() => {
+    dispatch(categoryActionCreators.getCategories());
+  }, []);
+
+  const categoriesOptions = categories.map((category: ICategory) => ({
+    label: category.name,
+    value: category.id
+  }));
+
   const onChange = ({
     target
   }: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setInputData((prevState: IOffer) => ({
+    setInputData((prevState: IOfferForCreation) => ({
       ...prevState,
       [target.name]: target.value
     }));
@@ -56,7 +74,7 @@ export const AddOffer = (): JSX.Element => {
   const onLocationChange = ({
     target
   }: React.ChangeEvent<HTMLInputElement>) => {
-    setInputData((prevState: IOffer) => ({
+    setInputData((prevState: IOfferForCreation) => ({
       ...prevState,
       location: {
         ...prevState.location,
@@ -66,7 +84,7 @@ export const AddOffer = (): JSX.Element => {
   };
 
   const onCityChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    setInputData((prevState: IOffer) => ({
+    setInputData((prevState: IOfferForCreation) => ({
       ...prevState,
       location: {
         ...prevState.location,
@@ -79,7 +97,7 @@ export const AddOffer = (): JSX.Element => {
   };
 
   const onRegionChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    setInputData((prevState: IOffer) => ({
+    setInputData((prevState: IOfferForCreation) => ({
       ...prevState,
       location: {
         ...prevState.location,
@@ -92,9 +110,16 @@ export const AddOffer = (): JSX.Element => {
   };
 
   const handleAddingOffer = async () => {
-    const result = await dispatch(actionCreators.createOffer(inputData));
+    const result = await dispatch(offerActionCreators.createOffer(inputData));
 
     console.log({ result });
+  };
+
+  const handleSelectingCategories = (values: string[]) => {
+    setInputData((prevState: IOfferForCreation) => ({
+      ...prevState,
+      categoryIds: values
+    }));
   };
 
   return (
@@ -119,14 +144,19 @@ export const AddOffer = (): JSX.Element => {
       </StyledRow>
       <StyledRow>
         <StyledColumn>
+          <MultiSelect
+            onChange={handleSelectingCategories}
+            options={categoriesOptions}
+            selectedOptions={inputData.categoryIds}
+          />
+        </StyledColumn>
+        <StyledColumn>
           <FormField label={t('addOffer.street')}>
             <TextInput name="street" onChange={onLocationChange} />
           </FormField>
           <FormField label={t('addOffer.postalCode')}>
             <TextInput name="postalCode" onChange={onLocationChange} />
           </FormField>
-        </StyledColumn>
-        <StyledColumn>
           <FormField label={t('addOffer.city')}>
             <TextInput name="name" onChange={onCityChange} />
           </FormField>

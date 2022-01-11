@@ -22,6 +22,7 @@ namespace Entities
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseNpgsql().UseSnakeCaseNamingConvention();
+            optionsBuilder.EnableSensitiveDataLogging();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -57,6 +58,11 @@ namespace Entities
             modelBuilder.Entity<Category>()
                 .Property(c => c.Created)
                 .HasDefaultValueSql("current_timestamp");
+
+            modelBuilder.Entity<Category>()
+                .HasMany(c => c.Children)
+                .WithOne(p => p.Parent)
+                .HasForeignKey(e => e.ParentId);
 
             modelBuilder.Entity<User>()
                 .Property(u => u.DarkMode)

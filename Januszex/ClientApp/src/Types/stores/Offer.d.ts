@@ -11,5 +11,18 @@ export interface IOffer {
   price: number;
   location: ILocation;
   user: IUserForOffer;
-  categories: ICategory[];
+  categories?: ICategory[];
+  categoryIds?: Id[];
+}
+
+export interface IOfferForCreation {
+  id: Id;
+  title: string;
+  content: string;
+  created: string;
+  isActive: boolean;
+  price: number;
+  location: ILocation;
+  user: IUserForOffer;
+  categoryIds: Id[];
 }

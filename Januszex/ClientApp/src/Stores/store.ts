@@ -1,6 +1,7 @@
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import { OfferState, reducer as offerReducer } from './Offer';
+import { CategoryState, reducer as categoryReducer } from './Category';
 
 declare global {
   interface Window {
@@ -10,6 +11,7 @@ declare global {
 
 export interface ApplicationState {
   offer: OfferState | undefined;
+  category: CategoryState | undefined;
 }
 
 export interface AppThunkAction<TAction> {
@@ -21,8 +23,10 @@ const composeEnhancers =
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     : compose;
 
-// TODO: Add reducers
-const rootReducer = combineReducers({ offer: offerReducer });
+const rootReducer = combineReducers({
+  offer: offerReducer,
+  category: categoryReducer
+});
 
 export const store = createStore(
   rootReducer,

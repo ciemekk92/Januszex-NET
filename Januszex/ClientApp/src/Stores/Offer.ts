@@ -2,7 +2,7 @@ import { Action, Reducer } from 'redux';
 import { AppThunkAction } from './store';
 import { ActionTypes } from './constants';
 import { Api } from 'Utils/Api';
-import { IOffer } from 'Types/stores';
+import { IOffer, IOfferForCreation } from 'Types/stores';
 import { isDefined } from 'Utils/isDefined';
 
 export interface OfferState {
@@ -79,7 +79,7 @@ export const actionCreators = {
       }
     },
   createOffer:
-    (data: IOffer): AppThunkAction<OfferActionTypes> =>
+    (data: IOfferForCreation): AppThunkAction<OfferActionTypes> =>
     async (dispatch, getState) => {
       const appState = getState();
 
@@ -113,15 +113,12 @@ const initialState: OfferState = {
       id: ''
     },
     location: {
-      id: '',
       street: '',
       postalCode: '',
       city: {
-        id: '',
         name: ''
       },
       region: {
-        id: '',
         name: ''
       }
     }

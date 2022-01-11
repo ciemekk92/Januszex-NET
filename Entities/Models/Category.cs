@@ -1,3 +1,4 @@
+using Entities.DataTransferObjects;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -22,8 +23,10 @@ namespace Entities.Models
         [Column("created")]
         public DateTime Created { get; set; }
 
-        public string ParentCategoryId { get; set; }
+        public string ParentId { get; set; }
         public virtual Category Parent { get; set; }
+
+        public virtual ICollection<Category> Children { get; set; }
         
         public virtual ICollection<Offer> Offers { get; set; } 
     }

@@ -61,7 +61,7 @@ namespace Januszex.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Błąd serwera.");
+                return StatusCode(500, "Błąd serwera." + ex);
             }
         }
 
@@ -81,6 +81,20 @@ namespace Januszex.Controllers
                 }
 
                 var categoryEntity = _mapper.Map<Category>(category);
+
+                if (category.ChildrenIds != null)
+                {
+                    foreach (var childId in category.ChildrenIds)
+                    {
+                        var child = _repository.Category.GetCategoryById(childId);
+                        child.Parent = categoryEntity;
+
+                        categoryEntity.Children.Add(child);
+
+                        _repository.Category.UpdateCategory(child);
+                    }
+                }
+                
 
                 _repository.Category.CreateCategory(categoryEntity);
                 _repository.Save();

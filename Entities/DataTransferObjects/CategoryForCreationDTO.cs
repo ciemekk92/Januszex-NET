@@ -15,5 +15,14 @@ namespace Entities.Models
         public string Name { get; set; }
 
         public ICollection<OfferDTO> Offers { get; set; }
+
+        public string ParentId { get; set; }
+
+        public CategoryDTO Parent { get; set; }
+
+        public List<string> ChildrenIds { get; set; }
+        public ICollection<CategoryDTO> Children { get; set; }
+
+
     }
 }
