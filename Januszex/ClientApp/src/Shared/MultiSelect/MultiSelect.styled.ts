@@ -1,11 +1,16 @@
 import styled from 'styled-components';
 
+interface RowProps {
+  readonly depth: number;
+}
+
 export const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
 `;
-export const StyledRow = styled.div`
+export const StyledRow = styled.div<RowProps>`
   display: flex;
+  margin-left: ${(props) => (props.depth + 1) * 2}rem;
 `;
 
 export const StyledCheckbox = styled.input`

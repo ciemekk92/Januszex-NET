@@ -16,5 +16,7 @@ namespace Entities.DataTransferObjects
 
         public User User { get; }
         public ICollection<OfferCategoryDTO> Categories { get; set; }
+
+        public ICollection<PhotoDTO> Photos { get; set; }
     }
 }

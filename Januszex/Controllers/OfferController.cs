@@ -107,6 +107,9 @@ namespace Januszex.Controllers
                 foreach (var categoryId in offer.CategoryIds)
                 {
                     var category = _repository.Category.GetCategoryById(categoryId);
+
+                    if (category == null) return BadRequest("Nieprawidlowe ID kategorii.");
+
                     category.Offers = new List<Offer>();
                     category.Offers.Add(offerEntity);
                     offerEntity.Categories.Add(category);

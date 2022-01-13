@@ -30,6 +30,8 @@ namespace Januszex.Profiles
             CreateMap<OfferForUpdateDTO, Offer>()
                 .ForMember(o => o.Price, opt => opt.ConvertUsing(new PriceFormatter()));
 
+            CreateMap<Photo, PhotoDTO>();
+
             CreateMap<Location, LocationDTO>();
         }
     }

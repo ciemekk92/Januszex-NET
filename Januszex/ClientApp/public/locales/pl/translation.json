@@ -17,6 +17,10 @@
     "postalCode": "Kod pocztowy",
     "city": "Miasto",
     "region": "Województwo",
-    "submit": "Dodaj ogłoszenie"
+    "submit": "Dodaj ogłoszenie",
+    "photoAlt": "Dodane zdjęcie "
+  },
+  "imageUpload": {
+    "label": "Dodaj zdjęcie"
   }
 }

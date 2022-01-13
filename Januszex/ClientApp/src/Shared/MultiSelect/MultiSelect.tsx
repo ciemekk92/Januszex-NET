@@ -1,4 +1,5 @@
 import React from 'react';
+import { OptionNode } from 'Types/utils';
 
 import {
   StyledCheckbox,
@@ -7,14 +8,9 @@ import {
   StyledRow
 } from './MultiSelect.styled';
 
-interface Option {
-  label: string;
-  value: string;
-}
-
 interface Props {
   onChange: (values: string[]) => void;
-  options: Option[];
+  options: OptionNode[];
   selectedOptions: string[];
 }
 
@@ -33,18 +29,25 @@ export const MultiSelect = ({
       }
     };
 
-  return (
-    <StyledContainer>
-      {options.map((option: Option) => (
-        <StyledRow key={option.value}>
-          <StyledCheckbox
-            checked={selectedOptions.includes(option.value)}
-            onChange={handleSelectingValue(option.value)}
-            type="checkbox"
-          />
-          <StyledLabel htmlFor={option.label}>{option.label}</StyledLabel>
-        </StyledRow>
-      ))}
-    </StyledContainer>
-  );
+  const renderChildren = (children?: OptionNode[]) => {
+    if (children) {
+      return children.map((option: OptionNode) => (
+        <React.Fragment key={option.value}>
+          <StyledRow depth={option.depth}>
+            <StyledCheckbox
+              checked={selectedOptions.includes(option.value)}
+              onChange={handleSelectingValue(option.value)}
+              type="checkbox"
+            />
+            <StyledLabel htmlFor={option.label}>{option.label}</StyledLabel>
+          </StyledRow>
+          {renderChildren(option.children)}
+        </React.Fragment>
+      ));
+    }
+
+    return;
+  };
+
+  return <StyledContainer>{renderChildren(options)}</StyledContainer>;
 };

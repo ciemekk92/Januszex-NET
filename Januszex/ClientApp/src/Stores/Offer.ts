@@ -89,11 +89,7 @@ export const actionCreators = {
       });
 
       if (appState && appState.offer) {
-        const result = await Api.post('api/Offer', data);
-
-        if (result.status === 201) {
-          await actionCreators.getOffers({ query: '' });
-        }
+        return await Api.post('api/Offer', data);
       }
     }
 };

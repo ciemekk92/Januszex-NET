@@ -18,5 +18,7 @@ namespace Entities.DataTransferObjects
         public decimal Price { get; set; }
         public List<string> CategoryIds { get; set; }
         public ICollection<CategoryDTO> Categories { get; set; }
+
+        public ICollection<Photo> Photos { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Entities.DataTransferObjects
 {
@@ -13,5 +14,8 @@ namespace Entities.DataTransferObjects
         public string Content { get; set; }
         
         public decimal Price { get; set; }
+        public List<string> CategoryIds { get; set; }
+        public ICollection<CategoryDTO> Categories { get; set; }
+        public ICollection<PhotoDTO> Photos { get; set; }
     }
 }

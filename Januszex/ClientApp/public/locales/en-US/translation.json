@@ -17,6 +17,10 @@
     "postalCode": "Postal Code",
     "city": "City",
     "region": "Region",
-    "submit": "Add Offer"
+    "submit": "Add Offer",
+    "photoAlt": "Uploaded photo "
+  },
+  "imageUpload": {
+    "label": "Upload photo"
   }
 }

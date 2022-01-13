@@ -1,6 +1,7 @@
 import { ILocation } from './Location';
 import { ICategory } from './Category';
 import { IUserForOffer } from './User';
+import { Photo } from './Photo';
 
 export interface IOffer {
   id: Id;
@@ -25,4 +26,5 @@ export interface IOfferForCreation {
   location: ILocation;
   user: IUserForOffer;
   categoryIds: Id[];
+  photos: Photo[];
 }

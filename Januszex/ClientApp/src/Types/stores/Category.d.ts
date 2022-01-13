@@ -7,4 +7,5 @@ export interface ICategory {
     id: Id;
     name: string;
   };
+  children?: ICategory[];
 }
