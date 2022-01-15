@@ -11,13 +11,15 @@ import {
 interface Props {
   onChange: (values: string[]) => void;
   options: OptionNode[];
-  selectedOptions: string[];
+  selectedOptions: Id[];
+  disabledOptions: Id[];
 }
 
 export const MultiSelect = ({
   onChange,
   options,
-  selectedOptions
+  selectedOptions,
+  disabledOptions
 }: Props): JSX.Element => {
   const handleSelectingValue =
     (value: string) =>
@@ -35,9 +37,13 @@ export const MultiSelect = ({
         <React.Fragment key={option.value}>
           <StyledRow depth={option.depth}>
             <StyledCheckbox
-              checked={selectedOptions.includes(option.value)}
+              checked={
+                selectedOptions.includes(option.value) ||
+                disabledOptions.includes(option.value)
+              }
               onChange={handleSelectingValue(option.value)}
               type="checkbox"
+              disabled={disabledOptions.includes(option.value)}
             />
             <StyledLabel htmlFor={option.label}>{option.label}</StyledLabel>
           </StyledRow>

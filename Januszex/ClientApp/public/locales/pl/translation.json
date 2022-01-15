@@ -8,6 +8,9 @@
     "logout": "Wyloguj się",
     "add": "Dodaj ogłoszenie"
   },
+  "homePage": {
+    "searchPlaceholder": "Wpisz szukaną frazę..."
+  },
   "addOffer": {
     "title": "Nazwa",
     "content": "Treść",
@@ -18,9 +21,14 @@
     "city": "Miasto",
     "region": "Województwo",
     "submit": "Dodaj ogłoszenie",
-    "photoAlt": "Dodane zdjęcie "
+    "photos": "Zdjęcia",
+    "photoAlt": "Dodane zdjęcie ",
+    "categories": "Kategorie"
   },
   "imageUpload": {
     "label": "Dodaj zdjęcie"
+  },
+  "offerTile": {
+    "price": "Cena: "
   }
 }

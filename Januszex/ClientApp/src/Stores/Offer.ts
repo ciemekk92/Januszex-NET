@@ -89,7 +89,16 @@ export const actionCreators = {
       });
 
       if (appState && appState.offer) {
-        return await Api.post('api/Offer', data);
+        const result = await Api.post('api/Offer', data);
+
+        if (result) {
+          await dispatch({
+            type: ActionTypes.SET_LOADING,
+            isLoading: false
+          });
+
+          return result;
+        }
       }
     }
 };

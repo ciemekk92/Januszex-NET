@@ -4,10 +4,12 @@ import { actionCreators } from 'Stores/Offer';
 import { KEYBOARD_KEYS } from 'Shared/constants';
 
 import { StyledContainer, StyledInput } from './HomePageSearch.styled';
+import { useTranslation } from 'react-i18next';
 
 export const HomePageSearch = (): JSX.Element => {
   const [query, setQuery] = React.useState<string>('');
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const handleFetchingOffers = (query: string) => {
     dispatch(actionCreators.getOffers({ query }));
@@ -26,7 +28,7 @@ export const HomePageSearch = (): JSX.Element => {
   return (
     <StyledContainer>
       <StyledInput
-        placeholder={''}
+        placeholder={t('homePage.searchPlaceholder')}
         value={query}
         onChange={onChange}
         onKeyDown={handleSubmit}

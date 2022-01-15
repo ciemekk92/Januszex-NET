@@ -6,14 +6,18 @@ export const StyledContainer = styled.div`
 `;
 
 export const StyledInput = styled.input`
-  width: 80%;
-  height: 5.6rem;
-  font-size: 3.6rem;
-  padding: 1rem;
+  width: 70%;
+  height: 4.8rem;
+  font-size: 3rem;
+  padding: 1rem 2rem;
   border-radius: 1rem;
   border: none;
 
   &:focus {
     outline: none;
+  }
+
+  &::placeholder {
+    color: #ccc;
   }
 `;

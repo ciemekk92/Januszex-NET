@@ -1,15 +1,24 @@
 import React from 'react';
-import { shallowEqual, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { HomePageSearch } from 'Modules/HomePageSearch';
 import { AllOffers } from 'Modules/AllOffers';
 import { ApplicationState } from 'Stores/store';
-import { useTranslation } from 'react-i18next';
+import { actionCreators } from 'Stores/Offer';
 
 export const Home = (): JSX.Element => {
+  const dispatch = useDispatch();
+
   const offers = useSelector(
     (state: ApplicationState) => (state.offer ? state.offer.offers : []),
     shallowEqual
   );
+
+  React.useEffect(() => {
+    if (!offers.length) {
+      dispatch(actionCreators.getOffers({ query: '' }));
+    }
+  }, []);
 
   const { i18n } = useTranslation();
 

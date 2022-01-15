@@ -20,8 +20,10 @@ namespace Repository
             {
                 var filteredOffers = FindByCondition(o => o.Categories.Any(c => c.Id == offerParameters.CategoryId))
                     .Include(o => o.Categories)
-                    .Include(o => o.Location)
-                    .OrderBy(o => o.Title);
+                    .Include(o => o.Photos)
+                    .Include(o => o.Location).ThenInclude(l => l.City)
+                    .Include(o => o.Location).ThenInclude(l => l.Region)
+                    .OrderBy(o => o.Created);
 
                 SearchByTitle(ref filteredOffers, offerParameters.Title);
 
@@ -30,9 +32,10 @@ namespace Repository
             {
                 var offers = FindAll()
                     .Include(o => o.Categories)
+                    .Include(o => o.Photos)
                     .Include(o => o.Location).ThenInclude(l => l.City)
                     .Include(o => o.Location).ThenInclude(l => l.Region)
-                    .OrderBy(c => c.Title);
+                    .OrderBy(c => c.Created);
 
                 SearchByTitle(ref offers, offerParameters.Title);
 

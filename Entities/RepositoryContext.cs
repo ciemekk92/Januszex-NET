@@ -53,9 +53,16 @@ namespace Entities
 
             modelBuilder.Entity<Offer>()
                 .HasMany(o => o.Photos)
-                .WithOne(p => p.Offer);
+                .WithOne(p => p.Offer)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Category>()
+            modelBuilder.Entity<Photo>()
+                .HasOne(p => p.Offer)
+                .WithMany(o => o.Photos)
+                .HasForeignKey(p => p.OfferId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+                modelBuilder.Entity<Category>()
                 .Property(c => c.Created)
                 .HasDefaultValueSql("current_timestamp");
 

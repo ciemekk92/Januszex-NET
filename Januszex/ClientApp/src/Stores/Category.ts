@@ -53,6 +53,11 @@ export const actionCreators = {
             type: ActionTypes.SET_CATEGORIES,
             categories: json
           });
+
+          dispatch({
+            type: ActionTypes.SET_LOADING,
+            isLoading: false
+          });
         }
       }
     },

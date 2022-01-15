@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { actionCreators as offerActionCreators } from 'Stores/Offer';
 import { actionCreators as categoryActionCreators } from 'Stores/Category';
-import { ICategory, IOfferForCreation, Photo } from 'Types/stores';
+import { ApplicationState } from 'Stores/store';
 import { TextInput } from 'Shared/TextInput';
 import { TextArea } from 'Shared/TextArea';
 import { FormField } from 'Shared/FormField';
@@ -14,7 +14,15 @@ import { NumericInput } from 'Shared/NumericInput';
 import { Heading5 } from 'Shared/Typography';
 import { ButtonFilled } from 'Shared/ButtonFilled';
 import { MultiSelect } from 'Shared/MultiSelect';
-
+import { ImageInput } from 'Shared/ImageInput';
+import { ApiResponse } from 'Types/Response';
+import { OptionNode } from 'Types/utils';
+import { ICategory, IOfferForCreation, Photo } from 'Types/stores';
+import { flattenObject } from 'Utils/flattenObject';
+import { isDefined } from 'Utils/isDefined';
+import { Container } from 'Hooks/useLoading';
+import { MANDATORY_FIELDS } from './fixtures';
+import { RemoveImageButton } from './components/RemoveImageButton';
 import {
   StyledColumn,
   StyledImageContainer,
@@ -22,22 +30,6 @@ import {
   StyledRow,
   Wrapper
 } from './AddOffer.styled';
-import { ApplicationState } from '../../Stores/store';
-import { ApiResponse } from '../../Types/Response';
-import { flattenObject } from '../../Utils/flattenObject';
-import { ImageInput } from '../../Shared/ImageInput';
-import { isDefined } from '../../Utils/isDefined';
-import { OptionNode } from 'Types/utils';
-import { RemoveImageButton } from './components/RemoveImageButton';
-
-const MANDATORY_FIELDS = [
-  'title',
-  'content',
-  'location.street',
-  'location.postalCode',
-  'location.city.name',
-  'location.region.name'
-];
 
 export const AddOffer = (): JSX.Element => {
   const initialData: IOfferForCreation = {
@@ -73,11 +65,26 @@ export const AddOffer = (): JSX.Element => {
   const [inputData, setInputData] =
     React.useState<IOfferForCreation>(initialData);
 
+  const [parentCategories, setParentCategories] = React.useState<Id[]>([]);
+
   const categories = useSelector(
     (state: ApplicationState) =>
       state.category ? state.category.categories : [],
     shallowEqual
   );
+
+  const areCategoriesLoading = useSelector(
+    (state: ApplicationState) =>
+      state.category ? state.category.isLoading : false,
+    shallowEqual
+  );
+
+  const areOffersLoading = useSelector(
+    (state: ApplicationState) => (state.offer ? state.offer.isLoading : false),
+    shallowEqual
+  );
+
+  const isLoading = areCategoriesLoading || areOffersLoading;
 
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -158,12 +165,9 @@ export const AddOffer = (): JSX.Element => {
   const handleImageChange = ({
     target
   }: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('dupa');
     const reader = new FileReader();
     let width: number;
     let height: number;
-
-    console.log({ target: target.files });
 
     if (target.files) {
       const file = target.files[0];
@@ -194,8 +198,6 @@ export const AddOffer = (): JSX.Element => {
         }));
       };
 
-      console.log(file);
-
       if (file) {
         reader.readAsDataURL(file);
       }
@@ -206,9 +208,7 @@ export const AddOffer = (): JSX.Element => {
     return (
       MANDATORY_FIELDS.some(
         (key: string) => !Boolean(flattenObject(inputData)[key])
-      ) ||
-      inputData.categoryIds.length === 0 ||
-      inputData.categoryIds.length > 3
+      ) || !inputData.categoryIds.length
     );
   };
 
@@ -224,11 +224,57 @@ export const AddOffer = (): JSX.Element => {
     }
   };
 
-  const handleSelectingCategories = (values: string[]) => {
+  const traverseCategories = (
+    categoriesArr: ICategory[],
+    currentIds?: Id[],
+    startingIds?: Id[],
+    parentsArray?: Id[]
+  ) => {
+    let arr = currentIds ? currentIds : startingIds ? [...startingIds] : [];
+    let parentsArr: Id[] = parentsArray ? parentsArray : [];
+
+    categoriesArr.forEach((category: ICategory) => {
+      if (category.children) {
+        const result = traverseCategories(
+          category.children,
+          arr,
+          undefined,
+          parentsArr
+        );
+
+        if (result.arr.length !== arr.length && category.parentId) {
+          arr.push(category.parentId);
+          parentsArr.push(category.parentId);
+        }
+      }
+
+      if (arr.includes(category.id) && category.parentId) {
+        arr.push(category.parentId);
+        parentsArr.push(category.parentId);
+      }
+    });
+
+    return { arr, parentsArr };
+  };
+
+  const handleSelectingCategories = (values: Id[]) => {
+    const { arr, parentsArr } = traverseCategories(
+      categories,
+      undefined,
+      values
+    );
+    const categoryIdsNoDupes = Array.from(new Set(arr));
+    const parentIdsNoDupes = Array.from(new Set(parentsArr));
+
+    const categoryIdsWithoutParents = categoryIdsNoDupes.filter(
+      (cat: Id) => !parentIdsNoDupes.includes(cat)
+    );
+
     setInputData((prevState: IOfferForCreation) => ({
       ...prevState,
-      categoryIds: values
+      categoryIds: categoryIdsWithoutParents
     }));
+    setParentCategories(parentIdsNoDupes);
   };
 
   const handleRemovingImageFactory = (filename: string) => () => {
@@ -241,77 +287,78 @@ export const AddOffer = (): JSX.Element => {
   };
 
   return (
-    <Wrapper>
-      <StyledRow>
-        {console.log({ photos: inputData.photos })}
-        <StyledColumn>
-          <FormField label={t('addOffer.title')}>
-            <TextInput name="title" onChange={onChange} />
-          </FormField>
-          <FormField label={t('addOffer.price')}>
-            <NumericInput min={0} name="price" onChange={onChange} />
-          </FormField>
-        </StyledColumn>
-        <StyledColumn>
-          <FormField label={t('addOffer.content')}>
-            <TextArea name="content" onChange={onChange} />
-          </FormField>
-        </StyledColumn>
-      </StyledRow>
-      <StyledRow>
-        <Heading5>{t('addOffer.locationLabel')}</Heading5>
-      </StyledRow>
-      <StyledRow>
-        <StyledColumn>
-          <FormField label={t('addOffer.street')}>
-            <TextInput name="street" onChange={onLocationChange} />
-          </FormField>
-          <FormField label={t('addOffer.postalCode')}>
-            <TextInput name="postalCode" onChange={onLocationChange} />
-          </FormField>
-          <FormField label={t('addOffer.city')}>
-            <TextInput name="name" onChange={onCityChange} />
-          </FormField>
-          <FormField label={t('addOffer.region')}>
-            <TextInput name="name" onChange={onRegionChange} />
-          </FormField>
-        </StyledColumn>
-        <StyledColumn>
-          <MultiSelect
-            onChange={handleSelectingCategories}
-            options={categoriesOptions}
-            selectedOptions={inputData.categoryIds}
-          />
-        </StyledColumn>
-      </StyledRow>
-      <Heading5>Zdjęcia</Heading5>
-      <ImageInput onChange={handleImageChange} />
-      <StyledRow>
-        <StyledImagesRow>
-          {inputData.photos.map((photo: Photo) => (
-            <React.Fragment key={photo.filename}>
-              <StyledImageContainer>
-                <img
-                  src={photo.link}
-                  alt={t('addOffer.photoAlt') + photo.filename}
-                />
-                <RemoveImageButton
-                  onClick={handleRemovingImageFactory(photo.filename)}
-                />
-              </StyledImageContainer>
-            </React.Fragment>
-          ))}
-        </StyledImagesRow>
-      </StyledRow>
-
-      <StyledRow>
-        <ButtonFilled
-          disabled={isSubmitButtonDisabled()}
-          onClick={handleAddingOffer}
-        >
-          {t('addOffer.submit')}
-        </ButtonFilled>
-      </StyledRow>
-    </Wrapper>
+    <React.Fragment>
+      <Container isLoading={isLoading} />
+      <Wrapper>
+        <StyledRow>
+          <StyledColumn>
+            <FormField label={t('addOffer.title')}>
+              <TextInput name="title" onChange={onChange} />
+            </FormField>
+            <FormField label={t('addOffer.price')}>
+              <NumericInput min={0} name="price" onChange={onChange} />
+            </FormField>
+          </StyledColumn>
+          <StyledColumn>
+            <FormField label={t('addOffer.content')}>
+              <TextArea name="content" onChange={onChange} />
+            </FormField>
+          </StyledColumn>
+        </StyledRow>
+        <StyledRow>
+          <StyledColumn>
+            <Heading5>{t('addOffer.locationLabel')}</Heading5>
+            <FormField label={t('addOffer.street')}>
+              <TextInput name="street" onChange={onLocationChange} />
+            </FormField>
+            <FormField label={t('addOffer.postalCode')}>
+              <TextInput name="postalCode" onChange={onLocationChange} />
+            </FormField>
+            <FormField label={t('addOffer.city')}>
+              <TextInput name="name" onChange={onCityChange} />
+            </FormField>
+            <FormField label={t('addOffer.region')}>
+              <TextInput name="name" onChange={onRegionChange} />
+            </FormField>
+          </StyledColumn>
+          <StyledColumn>
+            <Heading5>{t('addOffer.categories')}</Heading5>
+            <MultiSelect
+              onChange={handleSelectingCategories}
+              options={categoriesOptions}
+              selectedOptions={inputData.categoryIds}
+              disabledOptions={parentCategories}
+            />
+          </StyledColumn>
+        </StyledRow>
+        <Heading5>{t('addOffer.photos')}</Heading5>
+        <ImageInput onChange={handleImageChange} />
+        <StyledRow>
+          <StyledImagesRow>
+            {inputData.photos.map((photo: Photo) => (
+              <React.Fragment key={photo.filename}>
+                <StyledImageContainer>
+                  <img
+                    src={photo.link}
+                    alt={t('addOffer.photoAlt') + photo.filename}
+                  />
+                  <RemoveImageButton
+                    onClick={handleRemovingImageFactory(photo.filename)}
+                  />
+                </StyledImageContainer>
+              </React.Fragment>
+            ))}
+          </StyledImagesRow>
+        </StyledRow>
+        <StyledRow>
+          <ButtonFilled
+            disabled={isSubmitButtonDisabled()}
+            onClick={handleAddingOffer}
+          >
+            {t('addOffer.submit')}
+          </ButtonFilled>
+        </StyledRow>
+      </Wrapper>
+    </React.Fragment>
   );
 };

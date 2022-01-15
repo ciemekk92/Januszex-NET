@@ -96,7 +96,7 @@ namespace Januszex.Controllers
 
                 if (offer.CategoryIds == null || offer.CategoryIds.Count == 0)
                 {
-                    return BadRequest("Musisz wybrać od 1 do 3 kategorii.");
+                    return BadRequest("Musisz wybrać przynajmniej 1 kategorię.");
                 }
 
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

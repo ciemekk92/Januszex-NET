@@ -12,6 +12,7 @@ export interface IOffer {
   price: number;
   location: ILocation;
   user: IUserForOffer;
+  photos?: Photo[];
   categories?: ICategory[];
   categoryIds?: Id[];
 }

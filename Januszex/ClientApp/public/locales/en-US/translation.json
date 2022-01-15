@@ -8,6 +8,9 @@
     "logout": "Log out",
     "add": "Add Offer"
   },
+  "homePage": {
+    "searchPlaceholder": "Enter search phrase..."
+  },
   "addOffer": {
     "title": "Title",
     "content": "Content",
@@ -18,9 +21,14 @@
     "city": "City",
     "region": "Region",
     "submit": "Add Offer",
-    "photoAlt": "Uploaded photo "
+    "photos": "Photos",
+    "photoAlt": "Uploaded photo ",
+    "categories": "Categories"
   },
   "imageUpload": {
     "label": "Upload photo"
+  },
+  "offerTile": {
+    "price": "Price: "
   }
 }

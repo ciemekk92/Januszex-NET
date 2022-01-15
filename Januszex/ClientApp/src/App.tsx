@@ -3,8 +3,6 @@ import { Route } from 'react-router';
 import { ThemeProvider } from 'styled-components';
 import { Layout } from 'Modules/Layout/Layout';
 import { Home } from 'Modules/Home';
-import { FetchData } from 'Modules/FetchData';
-import AuthorizeRoute from 'Modules/api-authorization/AuthorizeRoute';
 import ApiAuthorizationRoutes from 'Modules/api-authorization/ApiAuthorizationRoutes';
 import { ApplicationPaths } from 'Modules/api-authorization/ApiAuthorizationConstants';
 

@@ -21,6 +21,10 @@ export const StyledColumn = styled.div`
   width: 50%;
   height: max-content;
   flex-direction: column;
+
+  & h5 {
+    margin-bottom: 2rem;
+  }
 `;
 
 export const StyledImagesRow = styled.div`
