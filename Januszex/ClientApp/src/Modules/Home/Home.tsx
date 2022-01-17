@@ -5,6 +5,7 @@ import { HomePageSearch } from 'Modules/HomePageSearch';
 import { AllOffers } from 'Modules/AllOffers';
 import { ApplicationState } from 'Stores/store';
 import { actionCreators } from 'Stores/Offer';
+import { Container } from '../../Hooks/useLoading';
 
 export const Home = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -12,6 +13,10 @@ export const Home = (): JSX.Element => {
   const offers = useSelector(
     (state: ApplicationState) => (state.offer ? state.offer.offers : []),
     shallowEqual
+  );
+
+  const areOffersLoading = useSelector((state: ApplicationState) =>
+    state.offer ? state.offer.isLoading : false
   );
 
   React.useEffect(() => {
@@ -28,6 +33,7 @@ export const Home = (): JSX.Element => {
 
   return (
     <React.Fragment>
+      <Container isLoading={areOffersLoading} />
       <div style={{ display: 'flex' }}>
         <button onClick={() => changeLanguage('pl')}>pl</button>
         <button onClick={() => changeLanguage('en-US')}>en</button>

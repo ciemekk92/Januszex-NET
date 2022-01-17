@@ -79,6 +79,7 @@ namespace Januszex.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult CreateOffer([FromBody] OfferForCreationDTO offer)
         {
@@ -129,6 +130,7 @@ namespace Januszex.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public IActionResult UpdateOffer(string id, [FromBody] OfferForUpdateDTO offer)
         {
@@ -164,6 +166,7 @@ namespace Januszex.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public IActionResult DeleteOffer(string id)
         {

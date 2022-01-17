@@ -56,7 +56,9 @@ namespace Repository
         {
             return FindByCondition(offer => offer.Id.Equals(offerId))
                 .Include(o => o.Categories)
-                .Include(o => o.Location)
+                .Include(o => o.Photos)
+                .Include(o => o.Location).ThenInclude(l => l.City)
+                .Include(o => o.Location).ThenInclude(l => l.Region)
                 .FirstOrDefault();
         }
 

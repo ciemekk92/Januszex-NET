@@ -12,13 +12,18 @@ import { useTranslation } from 'react-i18next';
 
 interface Props {
   data: IOffer;
+  onClick: (id: Id) => void;
 }
 
-export const OfferTile = ({ data }: Props): JSX.Element => {
+export const OfferTile = ({ data, onClick }: Props): JSX.Element => {
   const { t } = useTranslation();
 
+  const onClickFactory = (id: Id) => () => {
+    onClick(id);
+  };
+
   return (
-    <StyledTileContainer>
+    <StyledTileContainer onClick={onClickFactory(data.id)}>
       <StyledTileRow>
         {data.photos && data.photos.length && (
           <StyledImage>
