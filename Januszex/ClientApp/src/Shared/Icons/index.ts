@@ -1,0 +1,11 @@
+export { BinIcon } from './BinIcon';
+export { ClipboardIcon } from './ClipboardIcon';
+export { CogIcon } from './CogIcon';
+export { CrossIcon } from './CrossIcon';
+export { FilterIcon } from './FilterIcon';
+export { HomeIcon } from './HomeIcon';
+export { KeyIcon } from './KeyIcon';
+export { PencilIcon } from './PencilIcon';
+export { PriceTagIcon } from './PriceTagIcon';
+export { SwitchIcon } from './SwitchIcon';
+export { UserIcon } from './UserIcon';

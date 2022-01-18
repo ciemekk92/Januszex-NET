@@ -6,6 +6,8 @@ import { withTranslation } from 'react-i18next';
 import authService from './AuthorizeService';
 import { NavItem } from '../NavMenu/NavMenu.styled';
 import { ApplicationPaths } from './ApiAuthorizationConstants';
+import { CogIcon } from '../../Shared/Icons/CogIcon';
+import { ClipboardIcon, KeyIcon, SwitchIcon } from '../../Shared/Icons';
 
 class LoginMenu extends Component {
   constructor(props) {
@@ -60,11 +62,13 @@ class LoginMenu extends Component {
       <Fragment>
         <NavItem>
           <NavLink tag={Link} className="text-dark" to={profilePath}>
-            {`${t('navigation.greeting')} ${userName}`}
+            <CogIcon size={24} />
+            {`${t('navigation.settings')}`}
           </NavLink>
         </NavItem>
         <NavItem>
           <NavLink tag={Link} className="text-dark" to={logoutPath}>
+            <SwitchIcon size={24} />
             {t('navigation.logout')}
           </NavLink>
         </NavItem>
@@ -79,11 +83,13 @@ class LoginMenu extends Component {
       <Fragment>
         <NavItem>
           <NavLink tag={Link} className="text-dark" to={registerPath}>
+            <ClipboardIcon size={24} />
             {t('navigation.signUp')}
           </NavLink>
         </NavItem>
         <NavItem>
           <NavLink tag={Link} className="text-dark" to={loginPath}>
+            <KeyIcon size={24} />
             {t('navigation.login')}
           </NavLink>
         </NavItem>

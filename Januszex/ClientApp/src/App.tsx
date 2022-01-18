@@ -6,6 +6,7 @@ import { Layout } from 'Modules/Layout/Layout';
 import { Home } from 'Modules/Home';
 import ApiAuthorizationRoutes from 'Modules/api-authorization/ApiAuthorizationRoutes';
 import { ApplicationPaths } from 'Modules/api-authorization/ApiAuthorizationConstants';
+import authService from './Modules/api-authorization/AuthorizeService';
 
 import { darkTheme, GlobalStyles, lightTheme } from 'Themes';
 import { Routes } from './Routes/Routes';
@@ -15,12 +16,33 @@ import './custom.css';
 
 const App = (): JSX.Element => {
   const dispatch = useDispatch();
+  const [authenticated, setAuthenticated] = React.useState<boolean>(false);
+
+  const populateAuthenticationState = async () => {
+    const isAuthenticated = await authService.isAuthenticated();
+    setAuthenticated(isAuthenticated);
+  };
+
+  const onAuthenticationChange = async () => {
+    setAuthenticated(false);
+    await populateAuthenticationState();
+  };
+
+  React.useEffect(() => {
+    const subscription = authService.subscribe(() => onAuthenticationChange());
+    populateAuthenticationState();
+
+    return () => {
+      authService.unsubscribe(subscription);
+    };
+  }, []);
+
   React.useEffect(() => {
     const loadCurrentUser = async () =>
       await dispatch(actionCreators.getCurrentUser());
 
     loadCurrentUser();
-  }, []);
+  }, [authenticated]);
 
   const currentUser = useSelector((state: ApplicationState) =>
     state.user ? state.user.currentUser : null
@@ -41,13 +63,13 @@ const App = (): JSX.Element => {
       theme={getSelectedTheme() === 'dark' ? darkTheme : lightTheme}
     >
       <GlobalStyles themeType={getSelectedTheme()} />
-      <Layout>
+      <Layout selectedTheme={getSelectedTheme()}>
         <Route exact path="/" component={Home} />
         <Route
           path={ApplicationPaths.ApiAuthorizationPrefix}
           component={ApiAuthorizationRoutes}
         />
-        <Routes />
+        <Routes isAuthenticated={Boolean(currentUser?.user.id)} />
       </Layout>
     </ThemeProvider>
   );

@@ -5,10 +5,18 @@ interface ButtonProps {
   readonly selected?: boolean;
 }
 
-export const StyledPaginationContainer = styled.div`
+export const StyledRow = styled.div`
+  width: 100%;
   display: flex;
   align-items: center;
-  padding: 1rem;
+  margin-bottom: 2rem;
+`;
+
+export const StyledPaginationContainer = styled.div`
+  display: inline-flex;
+  align-items: center;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
   margin: 0 auto;
   width: 60rem;
   font-size: 2rem;
@@ -26,23 +34,28 @@ export const StyledPaginationButton = styled.div<ButtonProps>`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 4rem;
-  height: 4rem;
+  width: 3rem;
+  height: 3rem;
   border-radius: 0.5rem;
   background-color: ${(props) => props.theme.primary};
   margin: 0 0.5rem;
   cursor: pointer;
 `;
 
-export const StyledArrowButton = styled.div`
+export const StyledArrowButton = styled.button`
+  border: none;
+  background-color: transparent;
+  outline: none;
+  margin-top: 0.4rem;
+
   &::before {
     position: relative;
     content: '';
     display: inline-block;
     width: 1.2rem;
     height: 1.2rem;
-    border-right: 0.36rem solid rgba(255, 255, 255, 0.87);
-    border-top: 0.36rem solid rgba(255, 255, 255, 0.87);
+    border-right: 0.36rem solid ${(props) => props.theme.textTransparent};
+    border-top: 0.36rem solid ${(props) => props.theme.textTransparent};
   }
 `;
 

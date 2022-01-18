@@ -10,6 +10,7 @@ export interface OfferState {
   isLoading: boolean;
   offers: IOffer[];
   offer: IOffer;
+  userOffers: IOffer[];
   paginationProps: PaginationProps;
 }
 
@@ -23,6 +24,11 @@ interface SetOfferAction {
   offer: IOffer;
 }
 
+interface SetUserOffersAction {
+  type: typeof ActionTypes.SET_USER_OFFERS;
+  userOffers: IOffer[];
+}
+
 interface SetOfferPaginationPropsAction {
   type: typeof ActionTypes.SET_OFFER_PAGINATION_PROPS;
   paginationProps: PaginationProps;
@@ -33,15 +39,26 @@ interface SetOfferLoadingAction {
   isLoading: boolean;
 }
 
+interface PaginationParams {
+  PageNumber?: number;
+}
+
 export type OfferActionTypes =
   | SetOffersAction
   | SetOfferAction
+  | SetUserOffersAction
   | SetOfferPaginationPropsAction
   | SetOfferLoadingAction;
 
 export const actionCreators = {
   getOffers:
-    ({ query }: { query: string }): AppThunkAction<OfferActionTypes> =>
+    ({
+      query,
+      paginationParams
+    }: {
+      query: string;
+      paginationParams?: PaginationParams;
+    }): AppThunkAction<OfferActionTypes> =>
     async (dispatch, getState) => {
       const appState = getState();
 
@@ -51,7 +68,10 @@ export const actionCreators = {
       });
 
       if (appState && appState.offer) {
-        const result = await Api.get('api/Offer', { title: query });
+        const result = await Api.get('api/Offer', {
+          title: query,
+          PageNumber: paginationParams ? paginationParams.PageNumber : 1
+        });
 
         const paginationProps = JSON.parse(result.headers.get('x-pagination')!);
 
@@ -90,6 +110,39 @@ export const actionCreators = {
             type: ActionTypes.SET_OFFER,
             offer: json
           });
+        }
+      }
+    },
+  getUserOffers:
+    (): AppThunkAction<OfferActionTypes> => async (dispatch, getState) => {
+      const appState = getState();
+
+      await dispatch({
+        type: ActionTypes.SET_OFFER_LOADING,
+        isLoading: true
+      });
+
+      if (appState && appState.offer) {
+        if (appState.user) {
+          const userId = appState.user?.currentUser.user.id;
+
+          if (userId) {
+            const result = await Api.get(`api/Offer/User/${userId}`);
+
+            if (result.status === 200) {
+              const json = await result.json();
+
+              dispatch({
+                type: ActionTypes.SET_USER_OFFERS,
+                userOffers: json
+              });
+            }
+          } else {
+            dispatch({
+              type: ActionTypes.SET_OFFER_LOADING,
+              isLoading: false
+            });
+          }
         }
       }
     },
@@ -163,6 +216,7 @@ const initialState: OfferState = {
   isLoading: false,
   offers: [],
   offer: initialOffer,
+  userOffers: [],
   paginationProps: {
     TotalCount: 0,
     PageSize: 12,
@@ -194,6 +248,12 @@ export const reducer: Reducer<OfferState> = (
       return {
         ...state,
         offer: action.offer,
+        isLoading: false
+      };
+    case ActionTypes.SET_USER_OFFERS:
+      return {
+        ...state,
+        userOffers: action.userOffers,
         isLoading: false
       };
     case ActionTypes.SET_OFFER_LOADING:

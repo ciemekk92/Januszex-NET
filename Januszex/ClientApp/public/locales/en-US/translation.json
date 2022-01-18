@@ -4,9 +4,10 @@
     "home": "Home page",
     "signUp": "Sign Up",
     "login": "Log in",
-    "greeting": "Hello,",
+    "settings": "Account settings",
     "logout": "Log out",
-    "add": "Add Offer"
+    "add": "Add offer",
+    "myOffers": "My offers"
   },
   "homePage": {
     "searchPlaceholder": "Enter search phrase..."
@@ -33,5 +34,12 @@
   },
   "pagination": {
     "page": "Page {{page}} of {{of}}"
+  },
+  "myOffers": {
+    "title": "My offers",
+    "noOffer": "You haven't created any offers yet! :(",
+    "created": "Created at:",
+    "city": "City:",
+    "region": "Region:"
   }
 }

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { PaginationProps } from 'Types/utils';
 import { usePagination, DOTS } from 'Hooks';
 import {
+  StyledRow,
   StyledDotsButton,
   StyledNextButton,
   StyledPaginationButton,
@@ -27,8 +28,6 @@ export const Pagination = ({
     return null;
   }
 
-  console.log({ paginationProps });
-
   const paginationRange = usePagination({ paginationProps, siblingCount: 3 });
 
   if (paginationRange!.length < 2) {
@@ -50,38 +49,40 @@ export const Pagination = ({
   let lastPage = paginationRange![paginationRange!.length - 1];
 
   return (
-    <StyledPaginationContainer>
-      <StyledPaginationLabel>
-        {t('pagination.page', {
-          page: paginationProps.CurrentPage,
-          of: paginationProps.TotalPages
-        })}
-      </StyledPaginationLabel>
-      <StyledPaginationButtonsContainer>
-        <StyledPreviousButton
-          disabled={paginationProps.CurrentPage === 1}
-          onClick={onPrevious}
-        />
-        {paginationRange!.map((pageNumber: number | string) => {
-          if (pageNumber === DOTS) {
-            return <StyledDotsButton key={pageNumber} />;
-          }
+    <StyledRow>
+      <StyledPaginationContainer>
+        <StyledPaginationLabel>
+          {t('pagination.page', {
+            page: paginationProps.CurrentPage,
+            of: paginationProps.TotalPages
+          })}
+        </StyledPaginationLabel>
+        <StyledPaginationButtonsContainer>
+          <StyledPreviousButton
+            disabled={paginationProps.CurrentPage === 1}
+            onClick={onPrevious}
+          />
+          {paginationRange!.map((pageNumber: number | string) => {
+            if (pageNumber === DOTS) {
+              return <StyledDotsButton key={pageNumber} />;
+            }
 
-          return (
-            <StyledPaginationButton
-              selected={pageNumber === paginationProps.CurrentPage}
-              onClick={onPageChangeFactory(pageNumber as number)}
-              key={pageNumber}
-            >
-              {pageNumber}
-            </StyledPaginationButton>
-          );
-        })}
-        <StyledNextButton
-          disabled={paginationProps.CurrentPage === lastPage}
-          onClick={onNext}
-        />
-      </StyledPaginationButtonsContainer>
-    </StyledPaginationContainer>
+            return (
+              <StyledPaginationButton
+                selected={pageNumber === paginationProps.CurrentPage}
+                onClick={onPageChangeFactory(pageNumber as number)}
+                key={pageNumber}
+              >
+                {pageNumber}
+              </StyledPaginationButton>
+            );
+          })}
+          <StyledNextButton
+            disabled={paginationProps.CurrentPage === lastPage}
+            onClick={onNext}
+          />
+        </StyledPaginationButtonsContainer>
+      </StyledPaginationContainer>
+    </StyledRow>
   );
 };

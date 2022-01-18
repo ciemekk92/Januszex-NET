@@ -12,6 +12,7 @@ import { withTranslation } from 'react-i18next';
 
 import { TranslateFunction } from 'Types/modules';
 import LoginMenu from 'Modules/api-authorization/LoginMenu';
+import { HomeIcon, PriceTagIcon, UserIcon } from 'Shared/Icons';
 import { Logo } from '../Logo';
 import { NavItem } from './NavMenu.styled';
 
@@ -19,6 +20,7 @@ import './NavMenu.css';
 
 interface Props {
   t: TranslateFunction;
+  selectedTheme: string;
 }
 
 interface State {
@@ -53,7 +55,7 @@ class NavMenu extends React.Component<Props, State> {
         >
           <Container>
             <NavbarBrand tag={Link} to="/">
-              <Logo />
+              <Logo selectedTheme={this.props.selectedTheme} />
             </NavbarBrand>
             <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
             <Collapse
@@ -64,12 +66,20 @@ class NavMenu extends React.Component<Props, State> {
               <ul className="navbar-nav flex-grow">
                 <NavItem>
                   <NavLink tag={Link} className="text-dark" to="/">
+                    <HomeIcon size={24} />
                     {t('navigation.home')}
                   </NavLink>
                 </NavItem>
                 <NavItem>
                   <NavLink tag={Link} className="text-dark" to="/add-offer">
+                    <PriceTagIcon size={24} />
                     {t('navigation.add')}
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink tag={Link} className="text-dark" to="/my-offers">
+                    <UserIcon size={24} />
+                    {t('navigation.myOffers')}
                   </NavLink>
                 </NavItem>
                 <LoginMenu />

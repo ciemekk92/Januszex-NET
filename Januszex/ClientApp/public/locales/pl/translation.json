@@ -4,9 +4,10 @@
     "home": "Strona główna",
     "signUp": "Rejestracja",
     "login": "Zaloguj się",
-    "greeting": "Cześć,",
+    "settings": "Ustawienia konta",
     "logout": "Wyloguj się",
-    "add": "Dodaj ogłoszenie"
+    "add": "Dodaj ogłoszenie",
+    "myOffers": "Moje ogłoszenia"
   },
   "homePage": {
     "searchPlaceholder": "Wpisz szukaną frazę..."
@@ -33,5 +34,12 @@
   },
   "pagination": {
     "page": "Strona {{page}} z {{of}}"
+  },
+  "myOffers": {
+    "title": "Moje ogłoszenia",
+    "noOffer": "Nie stworzyłeś jeszcze żadnego ogłoszenia! :(",
+    "created": "Utworzone:",
+    "city": "Miasto:",
+    "region": "Województwo:"
   }
 }

@@ -13,3 +13,7 @@ export interface PaginationProps {
   HasNext: boolean;
   HasPrevious: boolean;
 }
+
+export interface IconProps {
+  size?: number;
+}

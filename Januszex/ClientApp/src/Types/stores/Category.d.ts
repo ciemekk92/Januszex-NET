@@ -3,9 +3,6 @@ export interface ICategory {
   name: string;
   created: string;
   parentId?: Id;
-  parent?: {
-    id: Id;
-    name: string;
-  };
+  parent?: ICategory;
   children?: ICategory[];
 }
