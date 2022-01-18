@@ -72,7 +72,7 @@ export const actionCreators = {
       if (appState && appState.user) {
         const result = await Api.get('api/User/me');
 
-        if (result) {
+        if (result.status === 200) {
           const json = await result.json();
 
           dispatch({

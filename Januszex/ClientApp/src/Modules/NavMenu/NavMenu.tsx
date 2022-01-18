@@ -46,7 +46,7 @@ class NavMenu extends React.Component<Props, State> {
     const { t } = this.props;
 
     return (
-      <header>
+      <header className="header-navbar">
         <Navbar
           className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3"
           light

@@ -3,15 +3,14 @@ import { Redirect, RouteComponentProps } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators } from 'Stores/Offer';
 import { ApplicationState } from 'Stores/store';
-
+import { Heading4 } from 'Shared/Typography';
+import { Photo } from 'Types/stores';
+import { Container } from 'Hooks/useLoading';
 import {
   StyledContentContainer,
   StyledImageContainer,
   StyledWrapper
 } from './ViewOffer.styled';
-import { Heading4 } from 'Shared/Typography';
-import { Photo } from '../../Types/stores';
-import { Container } from '../../Hooks/useLoading';
 
 export const ViewOffer = ({
   match
