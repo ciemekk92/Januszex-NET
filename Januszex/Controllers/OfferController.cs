@@ -80,6 +80,23 @@ namespace Januszex.Controllers
         }
 
         [Authorize]
+        [HttpGet("User/{id}")]
+        public IActionResult GetOffersForUser(string id)
+        {
+            try
+            {
+                var offers = _repository.Offer.GetOffersForUser(id);
+                var offersResult = _mapper.Map<IEnumerable<OfferDTO>>(offers);
+
+                return Ok(offersResult);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Błąd serwera." + ex);
+            }
+        }
+
+        [Authorize]
         [HttpPost]
         public IActionResult CreateOffer([FromBody] OfferForCreationDTO offer)
         {

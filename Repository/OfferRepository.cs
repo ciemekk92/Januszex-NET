@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Contracts;
 using Entities;
 using Entities.Helpers;
@@ -23,7 +24,7 @@ namespace Repository
                     .Include(o => o.Photos)
                     .Include(o => o.Location).ThenInclude(l => l.City)
                     .Include(o => o.Location).ThenInclude(l => l.Region)
-                    .OrderBy(o => o.Created);
+                    .OrderByDescending(o => o.Created);
 
                 SearchByTitle(ref filteredOffers, offerParameters.Title);
 
@@ -35,7 +36,7 @@ namespace Repository
                     .Include(o => o.Photos)
                     .Include(o => o.Location).ThenInclude(l => l.City)
                     .Include(o => o.Location).ThenInclude(l => l.Region)
-                    .OrderBy(c => c.Created);
+                    .OrderByDescending(c => c.Created);
 
                 SearchByTitle(ref offers, offerParameters.Title);
 
@@ -60,6 +61,17 @@ namespace Repository
                 .Include(o => o.Location).ThenInclude(l => l.City)
                 .Include(o => o.Location).ThenInclude(l => l.Region)
                 .FirstOrDefault();
+        }
+
+        public IEnumerable<Offer> GetOffersForUser(string userId)
+        {
+            return FindByCondition(offer => offer.UserId.Equals(userId))
+                .Include(o => o.Categories).ThenInclude(c => c.Parent).ThenInclude(c => c.Parent).ThenInclude(c => c.Parent)
+                .Include(o => o.Photos)
+                .Include(o => o.Location).ThenInclude(l => l.City)
+                .Include(o => o.Location).ThenInclude(l => l.Region)
+                .OrderByDescending(o => o.Created)
+                .ToList();
         }
 
         public void CreateOffer(Offer offer)
