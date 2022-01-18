@@ -2,6 +2,7 @@ import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import { OfferState, reducer as offerReducer } from './Offer';
 import { CategoryState, reducer as categoryReducer } from './Category';
+import { UserState, reducer as userReducer } from './User';
 
 declare global {
   interface Window {
@@ -12,6 +13,7 @@ declare global {
 export interface ApplicationState {
   offer: OfferState | undefined;
   category: CategoryState | undefined;
+  user: UserState | undefined;
 }
 
 export interface AppThunkAction<TAction> {
@@ -25,7 +27,8 @@ const composeEnhancers =
 
 const rootReducer = combineReducers({
   offer: offerReducer,
-  category: categoryReducer
+  category: categoryReducer,
+  user: userReducer
 });
 
 export const store = createStore(

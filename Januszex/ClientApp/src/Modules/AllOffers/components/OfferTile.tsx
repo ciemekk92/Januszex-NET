@@ -9,6 +9,7 @@ import {
 import { IOffer } from 'Types/stores';
 import { Heading5, Heading6 } from 'Shared/Typography';
 import { useTranslation } from 'react-i18next';
+import placeholder from 'Assets/placeholder-image.png';
 
 interface Props {
   data: IOffer;
@@ -22,14 +23,18 @@ export const OfferTile = ({ data, onClick }: Props): JSX.Element => {
     onClick(id);
   };
 
+  const renderImage = () => {
+    if (data.photos && data.photos.length) {
+      return <img src={data.photos[0].link} />;
+    }
+
+    return <img src={placeholder} />;
+  };
+
   return (
     <StyledTileContainer onClick={onClickFactory(data.id)}>
       <StyledTileRow>
-        {data.photos && data.photos.length && (
-          <StyledImage>
-            <img src={data.photos[0].link} />
-          </StyledImage>
-        )}
+        <StyledImage>{renderImage()}</StyledImage>
       </StyledTileRow>
       <StyledTileRow>
         <Heading5>{data.title}</Heading5>

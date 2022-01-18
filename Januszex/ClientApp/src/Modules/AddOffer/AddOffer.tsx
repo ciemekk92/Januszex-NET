@@ -4,7 +4,10 @@ import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
 
-import { actionCreators as offerActionCreators } from 'Stores/Offer';
+import {
+  actionCreators,
+  actionCreators as offerActionCreators
+} from 'Stores/Offer';
 import { actionCreators as categoryActionCreators } from 'Stores/Category';
 import { ApplicationState } from 'Stores/store';
 import { TextInput } from 'Shared/TextInput';
@@ -218,6 +221,7 @@ export const AddOffer = (): JSX.Element => {
     )) as unknown as ApiResponse;
 
     if (result.status === 201) {
+      dispatch(actionCreators.getOffers({ query: '' }));
       history.push('/');
     } else {
       console.log({ result: await result.json() });

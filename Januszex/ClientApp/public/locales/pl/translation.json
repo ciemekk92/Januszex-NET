@@ -30,5 +30,8 @@
   },
   "offerTile": {
     "price": "Cena: "
+  },
+  "pagination": {
+    "page": "Strona {{page}} z {{of}}"
   }
 }

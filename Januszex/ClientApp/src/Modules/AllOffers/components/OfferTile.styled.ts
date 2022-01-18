@@ -5,7 +5,7 @@ export const StyledTileContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  width: 23%;
+  width: 31%;
   border-radius: 0.8rem;
   background-color: ${(props) => props.theme.secondary};
   margin: 1rem;

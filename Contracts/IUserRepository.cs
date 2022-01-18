@@ -9,5 +9,8 @@ namespace Contracts
 {
     public interface IUserRepository
     {
+        IEnumerable<User> GetAllUsers();
+
+        User GetUserById(string userId);
     }
 }

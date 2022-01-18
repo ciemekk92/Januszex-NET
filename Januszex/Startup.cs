@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Januszex.Extensions;
 using Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace Januszex
 {
@@ -43,6 +44,7 @@ namespace Januszex
             services.AddAutoMapper(typeof(Startup));
 
             services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<RepositoryContext>();
 
             services.AddIdentityServer()

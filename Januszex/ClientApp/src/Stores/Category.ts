@@ -23,15 +23,15 @@ interface SetCategoryAction {
   category: ICategory;
 }
 
-interface SetLoadingAction {
-  type: typeof ActionTypes.SET_LOADING;
+interface SetCategoryLoadingAction {
+  type: typeof ActionTypes.SET_CATEGORY_LOADING;
   isLoading: boolean;
 }
 
 export type CategoryActionTypes =
   | SetCategoriesAction
   | SetCategoryAction
-  | SetLoadingAction;
+  | SetCategoryLoadingAction;
 
 export const actionCreators = {
   getCategories:
@@ -39,7 +39,7 @@ export const actionCreators = {
       const appState = getState();
 
       await dispatch({
-        type: ActionTypes.SET_LOADING,
+        type: ActionTypes.SET_CATEGORY_LOADING,
         isLoading: true
       });
 
@@ -55,7 +55,7 @@ export const actionCreators = {
           });
 
           dispatch({
-            type: ActionTypes.SET_LOADING,
+            type: ActionTypes.SET_CATEGORY_LOADING,
             isLoading: false
           });
         }
@@ -67,7 +67,7 @@ export const actionCreators = {
       const appState = getState();
 
       await dispatch({
-        type: ActionTypes.SET_LOADING,
+        type: ActionTypes.SET_CATEGORY_LOADING,
         isLoading: true
       });
 
@@ -120,7 +120,7 @@ export const reducer: Reducer<CategoryState> = (
         category: action.category,
         isLoading: false
       };
-    case ActionTypes.SET_LOADING:
+    case ActionTypes.SET_CATEGORY_LOADING:
       return {
         ...state,
         isLoading: action.isLoading

@@ -57,7 +57,12 @@ export const Api = {
   get: async <T extends ApiResponse>(
     url: string,
     params: Params = {}
-  ): Promise<T> => customFetch(getUrlWithParams(url, params), {}),
+  ): Promise<T> =>
+    customFetch(getUrlWithParams(url, params), {
+      headers: {
+        Authorization: `Bearer ${await getAccessToken()}`
+      }
+    }),
   getFull: async <T extends ApiResponse>(
     url: string,
     params: Params = {}

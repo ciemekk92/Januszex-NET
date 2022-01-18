@@ -9,6 +9,8 @@ namespace Januszex.Profiles
     {
         public MappingProfile()
         {
+            CreateMap<User, UserDTO>();
+
             CreateMap<Category, CategoryDTO>();
 
             CreateMap<Category, CategoryParentDTO>();

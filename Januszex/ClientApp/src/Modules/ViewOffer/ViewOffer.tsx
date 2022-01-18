@@ -27,6 +27,10 @@ export const ViewOffer = ({
 
   React.useEffect(() => {
     dispatch(actionCreators.getOffer(match.params.id));
+
+    return () => {
+      dispatch(actionCreators.clearOffer());
+    };
   }, []);
 
   if (!offer) {
@@ -36,15 +40,17 @@ export const ViewOffer = ({
   return (
     <React.Fragment>
       <Container isLoading={isOfferLoading} />
-      <StyledWrapper>
-        <Heading4>{offer.title}</Heading4>
-        <StyledContentContainer>{offer.content}</StyledContentContainer>
-        {offer.photos?.map((photo: Photo) => (
-          <StyledImageContainer key={photo.filename}>
-            <img alt={photo.filename} src={photo.link} />
-          </StyledImageContainer>
-        ))}
-      </StyledWrapper>
+      {offer.id && (
+        <StyledWrapper>
+          <Heading4>{offer.title}</Heading4>
+          <StyledContentContainer>{offer.content}</StyledContentContainer>
+          {offer.photos?.map((photo: Photo) => (
+            <StyledImageContainer key={photo.filename}>
+              <img alt={photo.filename} src={photo.link} />
+            </StyledImageContainer>
+          ))}
+        </StyledWrapper>
+      )}
     </React.Fragment>
   );
 };

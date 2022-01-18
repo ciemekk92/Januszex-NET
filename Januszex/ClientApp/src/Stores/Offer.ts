@@ -2,13 +2,15 @@ import { Action, Reducer } from 'redux';
 import { AppThunkAction } from './store';
 import { ActionTypes } from './constants';
 import { Api } from 'Utils/Api';
-import { IOffer, IOfferForCreation } from 'Types/stores';
 import { isDefined } from 'Utils/isDefined';
+import { PaginationProps } from 'Types/utils';
+import { IOffer, IOfferForCreation } from 'Types/stores';
 
 export interface OfferState {
   isLoading: boolean;
   offers: IOffer[];
   offer: IOffer;
+  paginationProps: PaginationProps;
 }
 
 interface SetOffersAction {
@@ -21,15 +23,21 @@ interface SetOfferAction {
   offer: IOffer;
 }
 
-interface SetLoadingAction {
-  type: typeof ActionTypes.SET_LOADING;
+interface SetOfferPaginationPropsAction {
+  type: typeof ActionTypes.SET_OFFER_PAGINATION_PROPS;
+  paginationProps: PaginationProps;
+}
+
+interface SetOfferLoadingAction {
+  type: typeof ActionTypes.SET_OFFER_LOADING;
   isLoading: boolean;
 }
 
 export type OfferActionTypes =
   | SetOffersAction
   | SetOfferAction
-  | SetLoadingAction;
+  | SetOfferPaginationPropsAction
+  | SetOfferLoadingAction;
 
 export const actionCreators = {
   getOffers:
@@ -38,12 +46,19 @@ export const actionCreators = {
       const appState = getState();
 
       await dispatch({
-        type: ActionTypes.SET_LOADING,
+        type: ActionTypes.SET_OFFER_LOADING,
         isLoading: true
       });
 
       if (appState && appState.offer) {
         const result = await Api.get('api/Offer', { title: query });
+
+        const paginationProps = JSON.parse(result.headers.get('x-pagination')!);
+
+        await dispatch({
+          type: ActionTypes.SET_OFFER_PAGINATION_PROPS,
+          paginationProps
+        });
 
         if (result) {
           const json = await result.json();
@@ -61,7 +76,7 @@ export const actionCreators = {
       const appState = getState();
 
       await dispatch({
-        type: ActionTypes.SET_LOADING,
+        type: ActionTypes.SET_OFFER_LOADING,
         isLoading: true
       });
 
@@ -78,13 +93,31 @@ export const actionCreators = {
         }
       }
     },
+  clearOffer:
+    (): AppThunkAction<OfferActionTypes> => async (dispatch, getState) => {
+      const appState = getState();
+
+      await dispatch({
+        type: ActionTypes.SET_OFFER_LOADING,
+        isLoading: true
+      });
+
+      if (appState && appState.offer) {
+        if (appState.offer.offer.id) {
+          dispatch({
+            type: ActionTypes.SET_OFFER,
+            offer: initialOffer
+          });
+        }
+      }
+    },
   createOffer:
     (data: IOfferForCreation): AppThunkAction<OfferActionTypes> =>
     async (dispatch, getState) => {
       const appState = getState();
 
       await dispatch({
-        type: ActionTypes.SET_LOADING,
+        type: ActionTypes.SET_OFFER_LOADING,
         isLoading: true
       });
 
@@ -93,7 +126,7 @@ export const actionCreators = {
 
         if (result) {
           await dispatch({
-            type: ActionTypes.SET_LOADING,
+            type: ActionTypes.SET_OFFER_LOADING,
             isLoading: false
           });
 
@@ -103,30 +136,40 @@ export const actionCreators = {
     }
 };
 
+const initialOffer = {
+  id: '',
+  title: '',
+  categories: [],
+  content: '',
+  created: '',
+  isActive: false,
+  price: 0,
+  user: {
+    id: ''
+  },
+  location: {
+    street: '',
+    postalCode: '',
+    city: {
+      name: ''
+    },
+    region: {
+      name: ''
+    }
+  }
+};
+
 const initialState: OfferState = {
   isLoading: false,
   offers: [],
-  offer: {
-    id: '',
-    title: '',
-    categories: [],
-    content: '',
-    created: '',
-    isActive: false,
-    price: 0,
-    user: {
-      id: ''
-    },
-    location: {
-      street: '',
-      postalCode: '',
-      city: {
-        name: ''
-      },
-      region: {
-        name: ''
-      }
-    }
+  offer: initialOffer,
+  paginationProps: {
+    TotalCount: 0,
+    PageSize: 12,
+    CurrentPage: 1,
+    TotalPages: 1,
+    HasNext: false,
+    HasPrevious: false
   }
 };
 
@@ -153,10 +196,15 @@ export const reducer: Reducer<OfferState> = (
         offer: action.offer,
         isLoading: false
       };
-    case ActionTypes.SET_LOADING:
+    case ActionTypes.SET_OFFER_LOADING:
       return {
         ...state,
         isLoading: action.isLoading
+      };
+    case ActionTypes.SET_OFFER_PAGINATION_PROPS:
+      return {
+        ...state,
+        paginationProps: action.paginationProps
       };
   }
 
