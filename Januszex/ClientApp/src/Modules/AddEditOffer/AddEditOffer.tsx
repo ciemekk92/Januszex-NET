@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { RouteComponentProps, useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -32,9 +32,17 @@ import {
   StyledImagesRow,
   StyledRow,
   Wrapper
-} from './AddOffer.styled';
+} from './AddEditOffer.styled';
+import { Api } from '../../Utils/Api';
 
-export const AddOffer = (): JSX.Element => {
+enum MODE {
+  ADD = 'ADD',
+  EDIT = 'EDIT'
+}
+
+interface Props extends RouteComponentProps<{ id: Id }> {}
+
+export const AddEditOffer = ({ match }: Props): JSX.Element => {
   const initialData: IOfferForCreation = {
     id: '',
     title: '',
@@ -65,6 +73,8 @@ export const AddOffer = (): JSX.Element => {
 
   const history = useHistory();
 
+  const [mode, setMode] = React.useState<MODE>(MODE.ADD);
+
   const [inputData, setInputData] =
     React.useState<IOfferForCreation>(initialData);
 
@@ -88,6 +98,29 @@ export const AddOffer = (): JSX.Element => {
   );
 
   const isLoading = areCategoriesLoading || areOffersLoading;
+
+  React.useEffect(() => {
+    if (match.params.id) {
+      setMode(MODE.EDIT);
+
+      Api.get(`api/Offer/${match.params.id}`)
+        .then((response) => response.json())
+        .then((json) => {
+          const { categories, ...rest } = json;
+
+          const categoryIds = categories.map(
+            (category: ICategory) => category.id
+          );
+
+          setInputData((prevState) => ({
+            ...prevState,
+            ...rest
+          }));
+
+          handleSelectingCategories(categoryIds);
+        });
+    }
+  }, [match.params.id]);
 
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -270,6 +303,8 @@ export const AddOffer = (): JSX.Element => {
     const categoryIdsNoDupes = Array.from(new Set(arr));
     const parentIdsNoDupes = Array.from(new Set(parentsArr));
 
+    console.log(parentsArr);
+
     const categoryIdsWithoutParents = categoryIdsNoDupes.filter(
       (cat: Id) => !parentIdsNoDupes.includes(cat)
     );
@@ -297,15 +332,28 @@ export const AddOffer = (): JSX.Element => {
         <StyledRow>
           <StyledColumn>
             <FormField label={t('addOffer.title')}>
-              <TextInput name="title" onChange={onChange} />
+              <TextInput
+                value={inputData.title}
+                name="title"
+                onChange={onChange}
+              />
             </FormField>
             <FormField label={t('addOffer.price')}>
-              <NumericInput min={0} name="price" onChange={onChange} />
+              <NumericInput
+                value={inputData.price}
+                min={0}
+                name="price"
+                onChange={onChange}
+              />
             </FormField>
           </StyledColumn>
           <StyledColumn>
             <FormField label={t('addOffer.content')}>
-              <TextArea name="content" onChange={onChange} />
+              <TextArea
+                value={inputData.content}
+                name="content"
+                onChange={onChange}
+              />
             </FormField>
           </StyledColumn>
         </StyledRow>
@@ -313,16 +361,32 @@ export const AddOffer = (): JSX.Element => {
           <StyledColumn>
             <Heading5>{t('addOffer.locationLabel')}</Heading5>
             <FormField label={t('addOffer.street')}>
-              <TextInput name="street" onChange={onLocationChange} />
+              <TextInput
+                value={inputData.location.street}
+                name="street"
+                onChange={onLocationChange}
+              />
             </FormField>
             <FormField label={t('addOffer.postalCode')}>
-              <TextInput name="postalCode" onChange={onLocationChange} />
+              <TextInput
+                value={inputData.location.postalCode}
+                name="postalCode"
+                onChange={onLocationChange}
+              />
             </FormField>
             <FormField label={t('addOffer.city')}>
-              <TextInput name="name" onChange={onCityChange} />
+              <TextInput
+                value={inputData.location.city.name}
+                name="name"
+                onChange={onCityChange}
+              />
             </FormField>
             <FormField label={t('addOffer.region')}>
-              <TextInput name="name" onChange={onRegionChange} />
+              <TextInput
+                value={inputData.location.region.name}
+                name="name"
+                onChange={onRegionChange}
+              />
             </FormField>
           </StyledColumn>
           <StyledColumn>
@@ -359,7 +423,7 @@ export const AddOffer = (): JSX.Element => {
             disabled={isSubmitButtonDisabled()}
             onClick={handleAddingOffer}
           >
-            {t('addOffer.submit')}
+            {mode === MODE.ADD ? t('addOffer.submit') : t('addOffer.edit')}
           </ButtonFilled>
         </StyledRow>
       </Wrapper>

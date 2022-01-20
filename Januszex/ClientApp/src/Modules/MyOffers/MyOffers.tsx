@@ -8,6 +8,7 @@ import { Heading5, Heading6 } from 'Shared/Typography';
 import { BinIcon, PencilIcon } from 'Shared/Icons';
 import { Container } from 'Hooks/useLoading';
 import { actionCreators } from 'Stores/Offer';
+import { actionCreators as categoryActionCreators } from 'Stores/Category';
 import { ApplicationState } from 'Stores/store';
 import { ICategory, IOffer } from 'Types/stores';
 import {
@@ -24,6 +25,7 @@ import {
   StyledValue,
   StyledWrapper
 } from './MyOffers.styled';
+import { Api } from '../../Utils/Api';
 
 export const MyOffers = (): JSX.Element => {
   const { t } = useTranslation();
@@ -32,11 +34,18 @@ export const MyOffers = (): JSX.Element => {
 
   React.useEffect(() => {
     dispatch(actionCreators.getUserOffers());
+    dispatch(categoryActionCreators.getCategories());
   }, []);
 
-  const isLoading: boolean = useSelector((state: ApplicationState) =>
+  const areOffersLoading: boolean = useSelector((state: ApplicationState) =>
     state.offer ? state.offer.isLoading : false
   );
+
+  const areCategoriesLoading: boolean = useSelector((state: ApplicationState) =>
+    state.category ? state.category.isLoading : false
+  );
+
+  const isLoading = areOffersLoading || areCategoriesLoading;
 
   const userOffers: IOffer[] = useSelector((state: ApplicationState) =>
     state.offer ? state.offer.userOffers : []
@@ -85,8 +94,19 @@ export const MyOffers = (): JSX.Element => {
     history.push(`/view-offer/${id}`);
   };
 
-  const handleEditingOfferFactory = (offer: IOffer) => () => {};
-  const handleDeletingOfferFactory = (id: Id) => () => {};
+  const handleEditingOfferFactory = (id: Id) => () => {
+    if (id) {
+      history.push(`/edit-offer/${id}`);
+    }
+  };
+
+  const handleDeletingOfferFactory = (id: Id) => async () => {
+    const result = await Api.delete(`/api/Offer/${id}`);
+
+    if (result.status === 204) {
+      dispatch(actionCreators.getUserOffers());
+    }
+  };
 
   const renderOfferPanels = (): JSX.Element | JSX.Element[] => {
     if (userOffers.length) {
@@ -116,7 +136,7 @@ export const MyOffers = (): JSX.Element => {
             </StyledCategoriesRow>
           </StyledTextDataContainer>
           <StyledButtonContainer>
-            <StyledButton onClick={handleEditingOfferFactory(offer)}>
+            <StyledButton onClick={handleEditingOfferFactory(offer.id)}>
               <PencilIcon />
             </StyledButton>
             <StyledButton onClick={handleDeletingOfferFactory(offer.id)}>
