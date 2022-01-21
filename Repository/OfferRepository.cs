@@ -48,7 +48,7 @@ namespace Repository
 
                 var sortedOffers = _sortHelper.ApplySort(offers, offerParameters.OrderBy);
 
-                return PagedList<Offer>.ToPagedList(offers, offerParameters.PageNumber, offerParameters.PageSize);
+                return PagedList<Offer>.ToPagedList(sortedOffers, offerParameters.PageNumber, offerParameters.PageSize);
 
             }
         }
