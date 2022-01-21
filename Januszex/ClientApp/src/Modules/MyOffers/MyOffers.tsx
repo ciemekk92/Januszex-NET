@@ -147,7 +147,7 @@ export const MyOffers = (): JSX.Element => {
       ));
     }
 
-    return t('myOffers.noOffers');
+    return <Heading6>{t('myOffers.noOffers')}</Heading6>;
   };
 
   return (

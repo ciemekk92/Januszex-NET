@@ -2,16 +2,13 @@ import { Action, Reducer } from 'redux';
 import { ActionTypes } from './constants';
 import { isDefined } from 'Utils/isDefined';
 import { Api } from 'Utils/Api';
-import { IUser } from 'Types/stores';
+import { ICurrentUser, IUser } from 'Types/stores';
 import { AppThunkAction } from './store';
 
 export interface UserState {
   isLoading: boolean;
   users: IUser[];
-  currentUser: {
-    user: IUser;
-    roles: string[];
-  };
+  currentUser: ICurrentUser;
 }
 
 interface SetUsersAction {
@@ -21,10 +18,7 @@ interface SetUsersAction {
 
 interface SetUserAction {
   type: typeof ActionTypes.SET_USER;
-  currentUser: {
-    user: IUser;
-    roles: string[];
-  };
+  currentUser: ICurrentUser;
 }
 
 interface SetUserLoadingAction {
@@ -92,7 +86,8 @@ const initialState: UserState = {
       id: '',
       userName: '',
       email: '',
-      darkMode: false
+      darkMode: false,
+      offerCount: 0
     },
     roles: []
   }

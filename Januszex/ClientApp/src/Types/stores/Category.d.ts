@@ -6,3 +6,10 @@ export interface ICategory {
   parent?: ICategory;
   children?: ICategory[];
 }
+
+export interface ICategoryFlat {
+  id: Id;
+  name: string;
+  created: string;
+  parentId?: Id;
+}

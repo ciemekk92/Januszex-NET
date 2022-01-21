@@ -186,6 +186,29 @@ export const actionCreators = {
           return result;
         }
       }
+    },
+  updateOffer:
+    (data: IOfferForCreation): AppThunkAction<OfferActionTypes> =>
+    async (dispatch, getState) => {
+      const appState = getState();
+
+      await dispatch({
+        type: ActionTypes.SET_OFFER_LOADING,
+        isLoading: true
+      });
+
+      if (appState && appState.offer) {
+        const result = await Api.put(`api/Offer/${data.id}`, data);
+
+        if (result) {
+          await dispatch({
+            type: ActionTypes.SET_OFFER_LOADING,
+            isLoading: false
+          });
+
+          return result;
+        }
+      }
     }
 };
 

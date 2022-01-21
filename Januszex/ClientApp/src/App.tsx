@@ -6,12 +6,11 @@ import { Layout } from 'Modules/Layout/Layout';
 import { Home } from 'Modules/Home';
 import ApiAuthorizationRoutes from 'Modules/api-authorization/ApiAuthorizationRoutes';
 import { ApplicationPaths } from 'Modules/api-authorization/ApiAuthorizationConstants';
-import authService from './Modules/api-authorization/AuthorizeService';
-
+import authService from 'Modules/api-authorization/AuthorizeService';
 import { darkTheme, GlobalStyles, lightTheme } from 'Themes';
-import { Routes } from './Routes/Routes';
-import { actionCreators } from './Stores/User';
-import { ApplicationState } from './Stores/store';
+import { Routes } from 'Routes/Routes';
+import { actionCreators } from 'Stores/User';
+import { ApplicationState } from 'Stores/store';
 import './custom.css';
 
 const App = (): JSX.Element => {
@@ -63,13 +62,13 @@ const App = (): JSX.Element => {
       theme={getSelectedTheme() === 'dark' ? darkTheme : lightTheme}
     >
       <GlobalStyles themeType={getSelectedTheme()} />
-      <Layout selectedTheme={getSelectedTheme()}>
+      <Layout currentUser={currentUser} selectedTheme={getSelectedTheme()}>
         <Route exact path="/" component={Home} />
         <Route
           path={ApplicationPaths.ApiAuthorizationPrefix}
           component={ApiAuthorizationRoutes}
         />
-        <Routes isAuthenticated={Boolean(currentUser?.user.id)} />
+        <Routes currentUser={currentUser} />
       </Layout>
     </ThemeProvider>
   );

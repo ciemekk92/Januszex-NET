@@ -1,5 +1,7 @@
 ﻿using Contracts;
 using Entities;
+using Entities.Helpers;
+using Entities.Models;
 
 namespace Repository
 {
@@ -13,10 +15,13 @@ namespace Repository
         private IRegionRepository _region;
         private ILocationRepository _location;
         private IPhotoRepository _photo;
+        private IBannedWordRepository _bannedWord;
+        private ISortHelper<Offer> _offerSortHelper;
 
-        public RepositoryWrapper(RepositoryContext repositoryContext)
+        public RepositoryWrapper(RepositoryContext repositoryContext, ISortHelper<Offer> offerSortHelper)
         {
             _repoContext = repositoryContext;
+            _offerSortHelper = offerSortHelper;
         }
 
         public IOfferRepository Offer
@@ -25,7 +30,7 @@ namespace Repository
             {
                 if(_offer == null)
                 {
-                    _offer = new OfferRepository(_repoContext);
+                    _offer = new OfferRepository(_repoContext, _offerSortHelper);
                 }
 
                 return _offer;
@@ -107,6 +112,19 @@ namespace Repository
                 }
 
                 return _photo;
+            }
+        }
+
+        public IBannedWordRepository BannedWord
+        {
+            get
+            {
+                if (_bannedWord == null)
+                {
+                    _bannedWord = new BannedWordRepository(_repoContext);
+                }
+
+                return _bannedWord;
             }
         }
 

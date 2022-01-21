@@ -12,5 +12,7 @@ namespace Entities.DataTransferObjects
         public string UserName { get; set; }
         public string Email { get; set; }
         public bool DarkMode { get; set; }
+
+        public int OfferCount { get; set; }
     }
 }

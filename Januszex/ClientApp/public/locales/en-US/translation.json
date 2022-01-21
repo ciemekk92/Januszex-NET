@@ -7,7 +7,8 @@
     "settings": "Account settings",
     "logout": "Log out",
     "add": "Add offer",
-    "myOffers": "My offers"
+    "myOffers": "My offers",
+    "adminPanel": "Admin panel"
   },
   "homePage": {
     "searchPlaceholder": "Enter search phrase..."
@@ -27,6 +28,12 @@
     "photoAlt": "Uploaded photo ",
     "categories": "Categories"
   },
+  "viewOffer": {
+    "price": "Price:",
+    "region": "Region:",
+    "city": "City:",
+    "address": "Address:"
+  },
   "imageUpload": {
     "label": "Upload photo"
   },
@@ -38,9 +45,36 @@
   },
   "myOffers": {
     "title": "My offers",
-    "noOffer": "You haven't created any offers yet! :(",
+    "noOffers": "You haven't created any offers yet! :(",
     "created": "Created at:",
     "city": "City:",
     "region": "Region:"
+  },
+  "manage": {
+    "users": {
+      "title": "Users",
+      "id": "ID:",
+      "email": "E-mail:",
+      "offerCount": "Offer count:",
+      "delete": "Delete user"
+    },
+    "categories": {
+      "title": "Categories",
+      "name": "Category title",
+      "parent": "Parent category",
+      "noParent": "No parent category",
+      "addCategory": "Add category",
+      "editCategory": "Edit category",
+      "clearInput": "Clear",
+      "deleteCategory": "Delete category",
+      "deleteLabel": "Delete"
+    },
+    "bannedWords": {
+      "title": "Banned words",
+      "nameLabel": "Word",
+      "addWord": "Add word",
+      "editWord": "Edit word",
+      "deleteWord": "Delete word"
+    }
   }
 }

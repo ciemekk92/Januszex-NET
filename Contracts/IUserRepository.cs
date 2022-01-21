@@ -12,5 +12,7 @@ namespace Contracts
         IEnumerable<User> GetAllUsers();
 
         User GetUserById(string userId);
+
+        void DeleteUser(User user);
     }
 }

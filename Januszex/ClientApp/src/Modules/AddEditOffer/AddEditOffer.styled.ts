@@ -34,6 +34,7 @@ export const StyledImagesRow = styled.div`
 
 export const StyledImageContainer = styled.div`
   width: 20rem;
+  height: 15rem;
   display: flex;
   align-items: center;
   justify-content: center;

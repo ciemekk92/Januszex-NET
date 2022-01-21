@@ -1,18 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Contracts;
 using Entities;
 using Entities.Helpers;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
 
 namespace Repository
 {
     public class OfferRepository : RepositoryBase<Offer>, IOfferRepository
     {
-        public OfferRepository(RepositoryContext repositoryContext)
+        private ISortHelper<Offer> _sortHelper;
+        public OfferRepository(RepositoryContext repositoryContext, ISortHelper<Offer> sortHelper)
             : base(repositoryContext)
         {
+            _sortHelper = sortHelper;
         }
 
         public PagedList<Offer> GetAllOffers(OfferParameters offerParameters)
@@ -28,6 +32,8 @@ namespace Repository
 
                 SearchByTitle(ref filteredOffers, offerParameters.Title);
 
+                var sortedOffers = _sortHelper.ApplySort(filteredOffers, offerParameters.OrderBy);
+
                 return PagedList<Offer>.ToPagedList(filteredOffers, offerParameters.PageNumber, offerParameters.PageSize);
             } else
             {
@@ -39,6 +45,8 @@ namespace Repository
                     .OrderByDescending(c => c.Created);
 
                 SearchByTitle(ref offers, offerParameters.Title);
+
+                var sortedOffers = _sortHelper.ApplySort(offers, offerParameters.OrderBy);
 
                 return PagedList<Offer>.ToPagedList(offers, offerParameters.PageNumber, offerParameters.PageSize);
 
@@ -52,6 +60,7 @@ namespace Repository
 
             offers = offers.Where(o => o.Title.ToLower().Contains(offerTitle.Trim().ToLower())).OrderBy(c => c.Title);
         }
+
 
         public Offer GetOfferById(string offerId)
         {

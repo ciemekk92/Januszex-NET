@@ -15,6 +15,8 @@ namespace Entities
         public DbSet<Offer> Offer { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Category> Category { get; set; }
+
+        public DbSet<BannedWord> BannedWord { get; set; }
         public DbSet<City> City { get; set; }
         public DbSet<Region> Region { get; set; }
 
@@ -69,7 +71,8 @@ namespace Entities
             modelBuilder.Entity<Category>()
                 .HasMany(c => c.Children)
                 .WithOne(p => p.Parent)
-                .HasForeignKey(e => e.ParentId);
+                .HasForeignKey(e => e.ParentId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<User>()
                 .Property(u => u.DarkMode)
@@ -88,6 +91,7 @@ namespace Entities
             modelBuilder.Entity<Location>().ToTable("Location");
             modelBuilder.Entity<City>().ToTable("City");
             modelBuilder.Entity<Region>().ToTable("Region");
+            modelBuilder.Entity<BannedWord>().ToTable("BannedWord");
 
             SeedUsers(modelBuilder);
             SeedRoles(modelBuilder);

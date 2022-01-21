@@ -13,6 +13,7 @@ import { withTranslation } from 'react-i18next';
 import { TranslateFunction } from 'Types/modules';
 import LoginMenu from 'Modules/api-authorization/LoginMenu';
 import { HomeIcon, PriceTagIcon, UserIcon } from 'Shared/Icons';
+import { ICurrentUser } from 'Types/stores';
 import { Logo } from '../Logo';
 import { NavItem } from './NavMenu.styled';
 
@@ -21,6 +22,7 @@ import './NavMenu.css';
 interface Props {
   t: TranslateFunction;
   selectedTheme: string;
+  currentUser: Nullable<ICurrentUser>;
 }
 
 interface State {
@@ -82,7 +84,7 @@ class NavMenu extends React.Component<Props, State> {
                     {t('navigation.myOffers')}
                   </NavLink>
                 </NavItem>
-                <LoginMenu />
+                <LoginMenu currentUser={this.props.currentUser} />
               </ul>
             </Collapse>
           </Container>

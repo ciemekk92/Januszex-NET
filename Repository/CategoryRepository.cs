@@ -26,6 +26,13 @@ namespace Repository
                 .ToList();
         }
 
+        public IEnumerable<Category> GetFlatCategories()
+        {
+            return FindAll()
+                .OrderBy(c => c.ParentId)
+                .ToList();
+        }
+
         public Category GetCategoryById(string categoryId)
         {
             return FindByCondition(category => category.Id.Equals(categoryId))

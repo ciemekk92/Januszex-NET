@@ -9,13 +9,20 @@ namespace Januszex.Profiles
     {
         public MappingProfile()
         {
-            CreateMap<User, UserDTO>();
+            CreateMap<User, UserDTO>()
+                .ForMember(o => o.OfferCount, opt => opt.MapFrom(x => x.Offers.Count));
 
             CreateMap<Category, CategoryDTO>();
 
             CreateMap<Category, CategoryParentDTO>();
 
+            CreateMap<Category, CategoryFlatDTO>();
+
             CreateMap<Category, OfferCategoryDTO>();
+
+            CreateMap<BannedWord, BannedWordDTO>();
+
+            CreateMap<BannedWordForCreationDTO, BannedWord>();
 
             CreateMap<OfferCategoryDTO, Category>();
 

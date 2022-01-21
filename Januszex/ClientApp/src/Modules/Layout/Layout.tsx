@@ -1,10 +1,12 @@
 import React from 'react';
 import { NavMenu } from 'Modules/NavMenu';
+import { ICurrentUser } from 'Types/stores';
 
 import { StyledContainer } from './Layout.styled';
 
 interface Props {
   selectedTheme: string;
+  currentUser: Nullable<ICurrentUser>;
 }
 
 export class Layout extends React.Component<Props> {
@@ -13,7 +15,10 @@ export class Layout extends React.Component<Props> {
   render() {
     return (
       <StyledContainer>
-        <NavMenu selectedTheme={this.props.selectedTheme} />
+        <NavMenu
+          currentUser={this.props.currentUser}
+          selectedTheme={this.props.selectedTheme}
+        />
         <div>{this.props.children}</div>
       </StyledContainer>
     );

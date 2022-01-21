@@ -21,15 +21,13 @@ namespace Januszex.Controllers
         private IMapper _mapper;
         private readonly UserManager<User> _userManager;
 
-        private readonly RepositoryContext _dbContext;
-
         public UserController(IRepositoryWrapper repository, IMapper mapper, UserManager<User> userManager)
         {
             _repository = repository;
             _mapper = mapper;
             _userManager = userManager;
         }
-        
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById(string id)
         {
@@ -53,7 +51,7 @@ namespace Januszex.Controllers
             {
                 return StatusCode(500, "B³¹d serwera." + ex);
             }
-           
+
         }
 
         [HttpGet]
@@ -95,6 +93,30 @@ namespace Januszex.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, "B³¹d serwera." + ex);
+            }
+        }
+
+        [Authorize]
+        [HttpDelete("{id}")]
+        public IActionResult DeleteUser(string id)
+        {
+            try
+            {
+                var user = _repository.User.GetUserById(id);
+
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
+                _repository.User.DeleteUser(user);
+                _repository.Save();
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Wewnêtrzny b³¹d serwera" + ex);
             }
         }
     }

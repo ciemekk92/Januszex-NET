@@ -1,9 +1,6 @@
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Entities.Models;
 using Contracts;
 using System;
@@ -42,6 +39,25 @@ namespace Januszex.Controllers
             }
         }
 
+        [Authorize]
+        [Route("flat")]
+        [HttpGet]
+        public IActionResult GetFlatCategoties()
+        {
+            try
+            {
+                var categories = _repository.Category.GetFlatCategories();
+
+                var categoriesResult = _mapper.Map<IEnumerable<CategoryFlatDTO>>(categories);
+
+                return Ok(categoriesResult);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Błąd serwera." + ex);
+            }
+        }
+
         [HttpGet("{id}", Name ="CategoryById")]
         public IActionResult GetCategoryById(string id)
         {
@@ -65,6 +81,7 @@ namespace Januszex.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult CreateCategory([FromBody]CategoryForCreationDTO category)
         {
@@ -109,6 +126,7 @@ namespace Januszex.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public IActionResult UpdateCategory(string id, [FromBody]CategoryForUpdateDTO category)
         {
@@ -144,6 +162,7 @@ namespace Januszex.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public IActionResult DeleteCategory(string id)
         {

@@ -3,6 +3,7 @@ import thunk from 'redux-thunk';
 import { OfferState, reducer as offerReducer } from './Offer';
 import { CategoryState, reducer as categoryReducer } from './Category';
 import { UserState, reducer as userReducer } from './User';
+import { BannedWordState, reducer as bannedWordReducer } from './BannedWord';
 
 declare global {
   interface Window {
@@ -14,6 +15,7 @@ export interface ApplicationState {
   offer: OfferState | undefined;
   category: CategoryState | undefined;
   user: UserState | undefined;
+  bannedWord: BannedWordState | undefined;
 }
 
 export interface AppThunkAction<TAction> {
@@ -28,7 +30,8 @@ const composeEnhancers =
 const rootReducer = combineReducers({
   offer: offerReducer,
   category: categoryReducer,
-  user: userReducer
+  user: userReducer,
+  bannedWord: bannedWordReducer
 });
 
 export const store = createStore(

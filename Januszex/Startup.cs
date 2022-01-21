@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Januszex.Extensions;
 using Entities;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace Januszex
 {
@@ -52,7 +53,9 @@ namespace Januszex
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
-            
+
+            services.AddAuthorization(options => options.AddPolicy("Role", policy => policy.RequireClaim(claimType: ClaimTypes.Role, "Admin")));
+
             services.AddDatabaseDeveloperPageExceptionFilter();
         }
 
@@ -71,14 +74,15 @@ namespace Januszex
                 app.UseHsts();
             }
 
-            app.UseAuthentication();
             app.UseIdentityServer();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
             app.UseRouting();
+            app.UseAuthentication();
             app.UseAuthorization();
+
 
             app.UseEndpoints(endpoints =>
             {

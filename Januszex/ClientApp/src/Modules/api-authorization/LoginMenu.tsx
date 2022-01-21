@@ -6,11 +6,30 @@ import { withTranslation } from 'react-i18next';
 import authService from './AuthorizeService';
 import { NavItem } from '../NavMenu/NavMenu.styled';
 import { ApplicationPaths } from './ApiAuthorizationConstants';
-import { CogIcon } from '../../Shared/Icons/CogIcon';
-import { ClipboardIcon, KeyIcon, SwitchIcon } from '../../Shared/Icons';
+import {
+  ClipboardIcon,
+  KeyIcon,
+  SwitchIcon,
+  CogIcon,
+  AdminIcon
+} from 'Shared/Icons';
+import { TranslateFunction } from 'Types/modules';
+import { ICurrentUser } from 'Types/stores';
 
-class LoginMenu extends Component {
-  constructor(props) {
+interface Props {
+  t: TranslateFunction;
+  currentUser: Nullable<ICurrentUser>;
+}
+
+interface State {
+  isAuthenticated: boolean;
+  userName: Nullable<string>;
+}
+
+class LoginMenu extends Component<Props, State> {
+  _subscription: number | undefined;
+
+  constructor(props: Props) {
     super(props);
 
     this.state = {
@@ -39,8 +58,17 @@ class LoginMenu extends Component {
     });
   }
 
+  get isUserAdmin(): boolean {
+    if (this.props.currentUser) {
+      return this.props.currentUser.roles.includes('Admin');
+    }
+
+    return false;
+  }
+
   render() {
     const { isAuthenticated, userName } = this.state;
+
     if (!isAuthenticated) {
       const registerPath = `${ApplicationPaths.Register}`;
       const loginPath = `${ApplicationPaths.Login}`;
@@ -51,15 +79,27 @@ class LoginMenu extends Component {
         pathname: `${ApplicationPaths.LogOut}`,
         state: { local: true }
       };
-      return this.authenticatedView(userName, profilePath, logoutPath);
+      return this.authenticatedView(userName!, profilePath, logoutPath);
     }
   }
 
-  authenticatedView(userName, profilePath, logoutPath) {
+  authenticatedView(
+    userName: string,
+    profilePath: string,
+    logoutPath: { pathname: string; state: { local: boolean } }
+  ) {
     const { t } = this.props;
 
     return (
       <Fragment>
+        {this.isUserAdmin && (
+          <NavItem>
+            <NavLink tag={Link} className="text-dark" to="/manage">
+              <AdminIcon size={24} />
+              {`${t('navigation.adminPanel')}`}
+            </NavLink>
+          </NavItem>
+        )}
         <NavItem>
           <NavLink tag={Link} className="text-dark" to={profilePath}>
             <CogIcon size={24} />
@@ -76,7 +116,7 @@ class LoginMenu extends Component {
     );
   }
 
-  anonymousView(registerPath, loginPath) {
+  anonymousView(registerPath: string, loginPath: string) {
     const { t } = this.props;
 
     return (

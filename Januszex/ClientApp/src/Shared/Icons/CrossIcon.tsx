@@ -1,12 +1,13 @@
 import React from 'react';
+import { IconProps } from 'Types/utils';
 
-export const CrossIcon = () => {
+export const CrossIcon = ({ size }: IconProps) => {
   return (
     <svg
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"
-      width="20"
-      height="20"
+      width={size || 20}
+      height={size || 20}
       viewBox="0 0 20 20"
     >
       <title>circle-with-cross</title>

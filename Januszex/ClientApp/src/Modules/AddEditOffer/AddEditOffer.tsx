@@ -261,6 +261,20 @@ export const AddEditOffer = ({ match }: Props): JSX.Element => {
     }
   };
 
+  const handleEditingOffer = async () => {
+    const result = (await dispatch(
+      offerActionCreators.updateOffer(inputData)
+    )) as unknown as ApiResponse;
+
+    if (result.status === 204) {
+      dispatch(actionCreators.getOffers({ query: '' }));
+      dispatch(actionCreators.getUserOffers());
+      history.push('/my-offers');
+    } else {
+      console.log({ result: await result.json() });
+    }
+  };
+
   const traverseCategories = (
     categoriesArr: ICategory[],
     currentIds?: Id[],
@@ -421,7 +435,7 @@ export const AddEditOffer = ({ match }: Props): JSX.Element => {
         <StyledRow>
           <ButtonFilled
             disabled={isSubmitButtonDisabled()}
-            onClick={handleAddingOffer}
+            onClick={mode === MODE.ADD ? handleAddingOffer : handleEditingOffer}
           >
             {mode === MODE.ADD ? t('addOffer.submit') : t('addOffer.edit')}
           </ButtonFilled>

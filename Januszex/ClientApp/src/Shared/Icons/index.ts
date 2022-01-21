@@ -1,3 +1,4 @@
+export { AdminIcon } from './AdminIcon';
 export { BinIcon } from './BinIcon';
 export { ClipboardIcon } from './ClipboardIcon';
 export { CogIcon } from './CogIcon';
@@ -6,6 +7,7 @@ export { FilterIcon } from './FilterIcon';
 export { HomeIcon } from './HomeIcon';
 export { KeyIcon } from './KeyIcon';
 export { PencilIcon } from './PencilIcon';
+export { PlayIcon } from './PlayIcon';
 export { PriceTagIcon } from './PriceTagIcon';
 export { SwitchIcon } from './SwitchIcon';
 export { UserIcon } from './UserIcon';

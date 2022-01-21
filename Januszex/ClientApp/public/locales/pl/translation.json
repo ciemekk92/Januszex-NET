@@ -7,7 +7,8 @@
     "settings": "Ustawienia konta",
     "logout": "Wyloguj się",
     "add": "Dodaj ogłoszenie",
-    "myOffers": "Moje ogłoszenia"
+    "myOffers": "Moje ogłoszenia",
+    "adminPanel": "Panel administracyjny"
   },
   "homePage": {
     "searchPlaceholder": "Wpisz szukaną frazę..."
@@ -27,6 +28,12 @@
     "photoAlt": "Dodane zdjęcie ",
     "categories": "Kategorie"
   },
+  "viewOffer": {
+    "price": "Cena:",
+    "region": "Województwo:",
+    "city": "Miasto:",
+    "address": "Adres:"
+  },
   "imageUpload": {
     "label": "Dodaj zdjęcie"
   },
@@ -38,9 +45,36 @@
   },
   "myOffers": {
     "title": "Moje ogłoszenia",
-    "noOffer": "Nie stworzyłeś jeszcze żadnego ogłoszenia! :(",
+    "noOffers": "Nie stworzyłeś jeszcze żadnego ogłoszenia! :(",
     "created": "Utworzone:",
     "city": "Miasto:",
     "region": "Województwo:"
+  },
+  "manage": {
+    "users": {
+      "title": "Użytkownicy",
+      "id": "ID:",
+      "email": "E-mail:",
+      "offerCount": "Liczba ogłoszeń:",
+      "delete": "Usuń użytkownika"
+    },
+    "categories": {
+      "title": "Kategorie",
+      "name": "Nazwa kategorii",
+      "parent": "Kategoria \"rodzic\"",
+      "noParent": "Brak rodzica",
+      "addCategory": "Dodaj kategorię",
+      "editCategory": "Edytuj kategorię",
+      "clearInput": "Wyczyść",
+      "deleteCategory": "Usuń kategorię",
+      "deleteLabel": "Usuń"
+    },
+    "bannedWords": {
+      "title": "Słowa zakazane",
+      "nameLabel": "Słowo",
+      "addWord": "Dodaj słowo",
+      "editWord": "Edytuj słowo",
+      "deleteWord": "Usuń słowo"
+    }
   }
 }
