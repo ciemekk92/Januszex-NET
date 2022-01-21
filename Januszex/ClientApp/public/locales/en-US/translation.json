@@ -76,5 +76,17 @@
       "editWord": "Edit word",
       "deleteWord": "Delete word"
     }
+  },
+  "filters": {
+    "sortTitle": "Sort by...",
+    "categories": "Filter by categories:",
+    "apply": "Apply filter",
+    "sort": {
+      "noSort": "No sorting",
+      "priceDesc": "Price descending",
+      "priceAsc": "Price ascending",
+      "nameDesc": "Title descending",
+      "nameAsc": "Title ascending"
+    }
   }
 }

@@ -3,7 +3,7 @@ import { AppThunkAction } from './store';
 import { ActionTypes } from './constants';
 import { Api } from 'Utils/Api';
 import { isDefined } from 'Utils/isDefined';
-import { PaginationProps } from 'Types/utils';
+import { FilterParams, PaginationProps } from 'Types/utils';
 import { IOffer, IOfferForCreation } from 'Types/stores';
 
 export interface OfferState {
@@ -12,6 +12,7 @@ export interface OfferState {
   offer: IOffer;
   userOffers: IOffer[];
   paginationProps: PaginationProps;
+  filterParams: FilterParams;
 }
 
 interface SetOffersAction {
@@ -113,6 +114,32 @@ export const actionCreators = {
         }
       }
     },
+  getFilteredOffers:
+    (sortParams?: string, categoryId?: Id): AppThunkAction<OfferActionTypes> =>
+    async (dispatch, getState) => {
+      const appState = getState();
+
+      await dispatch({
+        type: ActionTypes.SET_OFFER_LOADING,
+        isLoading: true
+      });
+
+      if (appState && appState.offer) {
+        const result = await Api.get('api/Offer', {
+          categoryId: categoryId ? categoryId : '',
+          orderBy: sortParams ? sortParams : ''
+        });
+
+        if (result.status === 200) {
+          const json = await result.json();
+
+          dispatch({
+            type: ActionTypes.SET_OFFERS,
+            offers: json
+          });
+        }
+      }
+    },
   getUserOffers:
     (): AppThunkAction<OfferActionTypes> => async (dispatch, getState) => {
       const appState = getState();
@@ -177,7 +204,7 @@ export const actionCreators = {
       if (appState && appState.offer) {
         const result = await Api.post('api/Offer', data);
 
-        if (result) {
+        if (result.status) {
           await dispatch({
             type: ActionTypes.SET_OFFER_LOADING,
             isLoading: false
@@ -247,6 +274,10 @@ const initialState: OfferState = {
     TotalPages: 1,
     HasNext: false,
     HasPrevious: false
+  },
+  filterParams: {
+    orderBy: 'price desc',
+    categoryId: ''
   }
 };
 

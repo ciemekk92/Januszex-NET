@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 
 namespace Januszex.Controllers
@@ -115,6 +116,13 @@ namespace Januszex.Controllers
                 if (offer.CategoryIds == null || offer.CategoryIds.Count == 0)
                 {
                     return BadRequest("Musisz wybrać przynajmniej 1 kategorię.");
+                }
+
+                var bannedWords = _repository.BannedWord.GetAllBannedWords();
+
+                if (bannedWords.Any(word => offer.Content.Contains(word.Name) || offer.Title.Contains(word.Name)))
+                {
+                    return StatusCode(422, "Ogłoszenie zawiera zakazane słowa.");
                 }
 
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

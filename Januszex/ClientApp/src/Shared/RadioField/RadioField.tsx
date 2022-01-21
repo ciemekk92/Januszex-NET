@@ -10,7 +10,7 @@ interface Props {
   id: string;
   label: string;
   checked: boolean;
-  onChange: VoidFunctionNoArgs;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const RadioField = ({

@@ -31,19 +31,26 @@ export const MultiSelect = ({
       }
     };
 
+  const isSelected = (value: string) => {
+    if (disabledOptions) {
+      return selectedOptions.includes(value) || disabledOptions.includes(value);
+    }
+
+    return selectedOptions.includes(value);
+  };
+
   const renderChildren = (children?: OptionNode[]) => {
     if (children) {
       return children.map((option: OptionNode) => (
         <React.Fragment key={option.value}>
           <StyledRow depth={option.depth}>
             <StyledCheckbox
-              checked={
-                selectedOptions.includes(option.value) ||
-                disabledOptions.includes(option.value)
-              }
+              checked={isSelected(option.value)}
               onChange={handleSelectingValue(option.value)}
               type="checkbox"
-              disabled={disabledOptions.includes(option.value)}
+              disabled={
+                disabledOptions ? disabledOptions.includes(option.value) : false
+              }
             />
             <StyledLabel htmlFor={option.label}>{option.label}</StyledLabel>
           </StyledRow>

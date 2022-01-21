@@ -42,7 +42,7 @@ namespace Januszex.Controllers
         [Authorize]
         [Route("flat")]
         [HttpGet]
-        public IActionResult GetFlatCategoties()
+        public IActionResult GetFlatCategories()
         {
             try
             {

@@ -1,12 +1,7 @@
 import styled from 'styled-components';
 
-export const StyledContainer = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-
 export const StyledInput = styled.input`
-  width: 70%;
+  width: 80%;
   height: 4.8rem;
   font-size: 3rem;
   padding: 1rem 2rem;

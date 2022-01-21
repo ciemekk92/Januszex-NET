@@ -5,7 +5,9 @@ import { HomePageSearch } from 'Modules/HomePageSearch';
 import { AllOffers } from 'Modules/AllOffers';
 import { ApplicationState } from 'Stores/store';
 import { actionCreators } from 'Stores/Offer';
-import { Container } from '../../Hooks/useLoading';
+import { Container } from 'Hooks/useLoading';
+import { OfferFilters } from 'Modules/OfferFilters';
+import { StyledSearchWrapper } from './Home.styled';
 
 export const Home = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -38,7 +40,10 @@ export const Home = (): JSX.Element => {
         <button onClick={() => changeLanguage('pl')}>pl</button>
         <button onClick={() => changeLanguage('en-US')}>en</button>
       </div>
-      <HomePageSearch />
+      <StyledSearchWrapper>
+        <OfferFilters />
+        <HomePageSearch />
+      </StyledSearchWrapper>
       <AllOffers data={offers} />
     </React.Fragment>
   );

@@ -31,6 +31,7 @@ import {
   StyledImageContainer,
   StyledImagesRow,
   StyledRow,
+  Warning,
   Wrapper
 } from './AddEditOffer.styled';
 import { Api } from '../../Utils/Api';
@@ -79,6 +80,7 @@ export const AddEditOffer = ({ match }: Props): JSX.Element => {
     React.useState<IOfferForCreation>(initialData);
 
   const [parentCategories, setParentCategories] = React.useState<Id[]>([]);
+  const [warning, setWarning] = React.useState<string>('');
 
   const categories = useSelector(
     (state: ApplicationState) =>
@@ -158,6 +160,7 @@ export const AddEditOffer = ({ match }: Props): JSX.Element => {
       ...prevState,
       [target.name]: target.value
     }));
+    setWarning('');
   };
 
   const onLocationChange = ({
@@ -170,6 +173,7 @@ export const AddEditOffer = ({ match }: Props): JSX.Element => {
         [target.name]: target.value
       }
     }));
+    setWarning('');
   };
 
   const onCityChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
@@ -183,6 +187,7 @@ export const AddEditOffer = ({ match }: Props): JSX.Element => {
         }
       }
     }));
+    setWarning('');
   };
 
   const onRegionChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
@@ -196,6 +201,7 @@ export const AddEditOffer = ({ match }: Props): JSX.Element => {
         }
       }
     }));
+    setWarning('');
   };
 
   const handleImageChange = ({
@@ -256,8 +262,11 @@ export const AddEditOffer = ({ match }: Props): JSX.Element => {
     if (result.status === 201) {
       dispatch(actionCreators.getOffers({ query: '' }));
       history.push('/');
+    } else if (result.status === 422) {
+      const text = await result.text();
+      setWarning(text);
     } else {
-      console.log({ result: await result.json() });
+      console.log({ result: await result.text() });
     }
   };
 
@@ -317,8 +326,6 @@ export const AddEditOffer = ({ match }: Props): JSX.Element => {
     const categoryIdsNoDupes = Array.from(new Set(arr));
     const parentIdsNoDupes = Array.from(new Set(parentsArr));
 
-    console.log(parentsArr);
-
     const categoryIdsWithoutParents = categoryIdsNoDupes.filter(
       (cat: Id) => !parentIdsNoDupes.includes(cat)
     );
@@ -343,6 +350,7 @@ export const AddEditOffer = ({ match }: Props): JSX.Element => {
     <React.Fragment>
       <Container isLoading={isLoading} />
       <Wrapper>
+        <Warning>{warning}</Warning>
         <StyledRow>
           <StyledColumn>
             <FormField label={t('addOffer.title')}>

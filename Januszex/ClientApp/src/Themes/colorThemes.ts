@@ -9,7 +9,8 @@ export const lightTheme = {
   disabledText: '#ccc',
   primaryTransparent: 'rgba(221,221,221,0.6)',
   secondaryTransparent: 'rgba(238,238,238,0.6)',
-  textTransparent: 'rgba(36, 42, 50, 0.6)'
+  textTransparent: 'rgba(36, 42, 50, 0.6)',
+  warning: '#EE5959FF'
 };
 
 export const darkTheme = {
@@ -23,5 +24,6 @@ export const darkTheme = {
   disabledText: '#ccc',
   primaryTransparent: 'rgba(58, 63, 71, 0.6)',
   secondaryTransparent: 'rgba(36, 42, 50, 0.6)',
-  textTransparent: 'rgba(238,238,238,0.6)'
+  textTransparent: 'rgba(238,238,238,0.6)',
+  warning: '#EE5959FF'
 };

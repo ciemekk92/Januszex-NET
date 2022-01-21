@@ -7,6 +7,12 @@ export const Wrapper = styled.div`
   padding: 4rem;
 `;
 
+export const Warning = styled.div`
+  display: flex;
+  color: ${(props) => props.theme.warning};
+  font-size: 2rem;
+`;
+
 export const StyledRow = styled.div`
   display: flex;
 

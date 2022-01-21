@@ -40,7 +40,7 @@ namespace Januszex.Controllers
         }
 
         [Authorize]
-        [HttpGet("{id}", Name = "BannedWordById")]
+        [HttpGet("{id}", Name ="BannedWordById")]
         public IActionResult GetBannedWordById(string id)
         {
             try
@@ -84,7 +84,7 @@ namespace Januszex.Controllers
                 _repository.BannedWord.CreateBannedWord(bannedWordEntity);
                 _repository.Save();
 
-                return CreatedAtRoute("BannedWordById", bannedWordEntity);
+                return CreatedAtAction("GetBannedWordById", new { id = bannedWordEntity.Id }, bannedWordEntity);
             }
             catch (Exception ex)
             {

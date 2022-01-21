@@ -76,5 +76,17 @@
       "editWord": "Edytuj słowo",
       "deleteWord": "Usuń słowo"
     }
+  },
+  "filters": {
+    "sortTitle": "Sortuj po...",
+    "categories": "Filtruj po kategorii",
+    "apply": "Zastosuj filtr",
+    "sort": {
+      "noSort": "Bez sortowania",
+      "priceDesc": "Cena malejąco",
+      "priceAsc": "Cena rosnąco",
+      "nameDesc": "Nazwa Z-A",
+      "nameAsc": "Nazwa A-Z"
+    }
   }
 }

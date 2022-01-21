@@ -4,14 +4,17 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { Heading5, Heading6 } from 'Shared/Typography';
 import { ApplicationState } from 'Stores/store';
 import { actionCreators } from 'Stores/BannedWord';
-import { StyledLabel, StyledRow } from '../../ManagementPanel.styled';
 import { TextInput } from 'Shared/TextInput';
 import { FORM_MODE } from 'Shared/constants';
+import { StyledLabel, StyledRow } from '../../ManagementPanel.styled';
+
 import {
   StyledBannedWordButton,
   StyledWordPanel
 } from './BannedWordsPanel.styled';
 import { Api } from 'Utils/Api';
+import { BinIcon, PencilIcon } from 'Shared/Icons';
+import { IBannedWord } from 'Types/stores';
 
 interface BannedWordInputData {
   name: string;
@@ -66,6 +69,14 @@ export const BannedWordsPanel = (): JSX.Element => {
     }
   };
 
+  const handleTogglingEditingWordFactory = (word: IBannedWord) => () => {
+    setInputData({
+      name: word.name
+    });
+    setMode(FORM_MODE.EDIT);
+    setEditedId(word.id);
+  };
+
   const handleEditingWord = async () => {
     try {
       if (editedId) {
@@ -76,6 +87,18 @@ export const BannedWordsPanel = (): JSX.Element => {
 
           handleClearingInputs();
         }
+      }
+    } catch (error) {
+      console.log({ error });
+    }
+  };
+
+  const handleDeletingWordFactory = (id: Id) => async () => {
+    try {
+      const result = await Api.delete(`api/BannedWord/${id}`);
+
+      if (result.status === 204) {
+        dispatch(actionCreators.getBannedWords());
       }
     } catch (error) {
       console.log({ error });
@@ -110,9 +133,16 @@ export const BannedWordsPanel = (): JSX.Element => {
   };
 
   const renderCurrentBannedWords = (): JSX.Element[] => {
-    return bannedWords.map((word: BannedWordInputData) => (
-      <StyledWordPanel key={word.name}>
+    return bannedWords.map((word: IBannedWord, index: number) => (
+      <StyledWordPanel key={`${word.name}_${index}`}>
         <StyledLabel>{word.name}</StyledLabel>
+        <div>
+          <PencilIcon
+            size={18}
+            onClick={handleTogglingEditingWordFactory(word)}
+          />
+          <BinIcon size={18} onClick={handleDeletingWordFactory(word.id)} />
+        </div>
       </StyledWordPanel>
     ));
   };

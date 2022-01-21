@@ -14,6 +14,11 @@ export interface PaginationProps {
   HasPrevious: boolean;
 }
 
+export interface FilterParams {
+  categoryId: Id;
+  orderBy: string;
+}
+
 export interface IconProps {
   size?: number;
 }
